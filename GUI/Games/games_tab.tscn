@@ -1,0 +1,182 @@
+[gd_scene format=3 uid="uid://cu3aqe1xv66dp"]
+
+[ext_resource type="Script" uid="uid://dgqiha15lgiae" path="res://GUI/Games/games_tab.gd" id="1_hoger"]
+
+[node name="Games" type="HSplitContainer" unique_id=1313561299]
+split_offsets = PackedInt32Array(280)
+split_offset = 280
+script = ExtResource("1_hoger")
+
+[node name="LeftPanel" type="VBoxContainer" parent="." unique_id=1706916255]
+custom_minimum_size = Vector2(220, 0)
+layout_mode = 2
+
+[node name="AddGameButton" type="Button" parent="LeftPanel" unique_id=1002485642]
+unique_name_in_owner = true
+layout_mode = 2
+text = "New Game"
+
+[node name="GameList" type="ScrollContainer" parent="LeftPanel" unique_id=1789498631]
+layout_mode = 2
+size_flags_vertical = 3
+horizontal_scroll_mode = 0
+
+[node name="GameListContent" type="VBoxContainer" parent="LeftPanel/GameList" unique_id=860826264]
+unique_name_in_owner = true
+layout_mode = 2
+size_flags_horizontal = 3
+
+[node name="RightSide" type="VBoxContainer" parent="." unique_id=1527277101]
+layout_mode = 2
+size_flags_horizontal = 3
+
+[node name="NoSelectionLabel" type="Label" parent="RightSide" unique_id=1017534841]
+unique_name_in_owner = true
+modulate = Color(1, 1, 1, 0.4)
+layout_mode = 2
+size_flags_vertical = 3
+text = "Select a game or create a new one."
+horizontal_alignment = 1
+vertical_alignment = 1
+
+[node name="RightPanel" type="VBoxContainer" parent="RightSide" unique_id=453473890]
+unique_name_in_owner = true
+visible = false
+layout_mode = 2
+size_flags_vertical = 3
+
+[node name="GameEditorPanel" type="VBoxContainer" parent="RightSide/RightPanel" unique_id=429978506]
+unique_name_in_owner = true
+layout_mode = 2
+
+[node name="NameRow" type="HBoxContainer" parent="RightSide/RightPanel/GameEditorPanel" unique_id=336097816]
+layout_mode = 2
+
+[node name="NameLabel" type="Label" parent="RightSide/RightPanel/GameEditorPanel/NameRow" unique_id=629963851]
+custom_minimum_size = Vector2(90, 0)
+layout_mode = 2
+text = "Game Name"
+
+[node name="GameNameField" type="LineEdit" parent="RightSide/RightPanel/GameEditorPanel/NameRow" unique_id=292294293]
+unique_name_in_owner = true
+layout_mode = 2
+size_flags_horizontal = 3
+placeholder_text = "Game name"
+
+[node name="TagsHeader" type="Label" parent="RightSide/RightPanel/GameEditorPanel" unique_id=2098689193]
+layout_mode = 2
+text = "Tags"
+
+[node name="GameTagsContainer" type="FlowContainer" parent="RightSide/RightPanel/GameEditorPanel" unique_id=1178643037]
+unique_name_in_owner = true
+layout_mode = 2
+
+[node name="ButtonsRow" type="HBoxContainer" parent="RightSide/RightPanel/GameEditorPanel" unique_id=1819690298]
+layout_mode = 2
+
+[node name="GameSaveButton" type="Button" parent="RightSide/RightPanel/GameEditorPanel/ButtonsRow" unique_id=1175013980]
+unique_name_in_owner = true
+layout_mode = 2
+size_flags_horizontal = 3
+text = "Save"
+
+[node name="GameDeleteButton" type="Button" parent="RightSide/RightPanel/GameEditorPanel/ButtonsRow" unique_id=2046762289]
+unique_name_in_owner = true
+layout_mode = 2
+disabled = true
+text = "Delete Game"
+
+[node name="ContactViewPanel" type="VBoxContainer" parent="RightSide/RightPanel" unique_id=61906070]
+unique_name_in_owner = true
+visible = false
+layout_mode = 2
+size_flags_vertical = 3
+
+[node name="BackButton" type="Button" parent="RightSide/RightPanel/ContactViewPanel" unique_id=325747267]
+unique_name_in_owner = true
+layout_mode = 2
+text = "< Back"
+flat = true
+alignment = 0
+
+[node name="ContactViewTitle" type="Label" parent="RightSide/RightPanel/ContactViewPanel" unique_id=489854588]
+unique_name_in_owner = true
+layout_mode = 2
+text = "Contact — Game"
+
+[node name="EventsScroll" type="ScrollContainer" parent="RightSide/RightPanel/ContactViewPanel" unique_id=52061362]
+layout_mode = 2
+size_flags_vertical = 3
+horizontal_scroll_mode = 0
+
+[node name="EventsList" type="VBoxContainer" parent="RightSide/RightPanel/ContactViewPanel/EventsScroll" unique_id=1312976945]
+unique_name_in_owner = true
+layout_mode = 2
+size_flags_horizontal = 3
+
+[node name="AddSep" type="HSeparator" parent="RightSide/RightPanel/ContactViewPanel" unique_id=1019924863]
+layout_mode = 2
+
+[node name="AddEventPanel" type="VBoxContainer" parent="RightSide/RightPanel/ContactViewPanel" unique_id=1208874206]
+unique_name_in_owner = true
+layout_mode = 2
+
+[node name="AddEventHeader" type="Label" parent="RightSide/RightPanel/ContactViewPanel/AddEventPanel" unique_id=436228455]
+layout_mode = 2
+text = "Log Event"
+
+[node name="KindRow" type="HBoxContainer" parent="RightSide/RightPanel/ContactViewPanel/AddEventPanel" unique_id=86627062]
+layout_mode = 2
+
+[node name="KindLabel" type="Label" parent="RightSide/RightPanel/ContactViewPanel/AddEventPanel/KindRow" unique_id=189996607]
+custom_minimum_size = Vector2(70, 0)
+layout_mode = 2
+text = "Kind"
+
+[node name="EventKindField" type="OptionButton" parent="RightSide/RightPanel/ContactViewPanel/AddEventPanel/KindRow" unique_id=1672906882]
+unique_name_in_owner = true
+layout_mode = 2
+size_flags_horizontal = 3
+
+[node name="ChannelRow" type="HBoxContainer" parent="RightSide/RightPanel/ContactViewPanel/AddEventPanel" unique_id=935280315]
+layout_mode = 2
+
+[node name="ChannelLabel" type="Label" parent="RightSide/RightPanel/ContactViewPanel/AddEventPanel/ChannelRow" unique_id=1745492166]
+custom_minimum_size = Vector2(70, 0)
+layout_mode = 2
+text = "Channel"
+
+[node name="EventChannelField" type="LineEdit" parent="RightSide/RightPanel/ContactViewPanel/AddEventPanel/ChannelRow" unique_id=755302560]
+unique_name_in_owner = true
+layout_mode = 2
+size_flags_horizontal = 3
+placeholder_text = "Email, Twitter, Discord..."
+
+[node name="ContentLabel" type="Label" parent="RightSide/RightPanel/ContactViewPanel/AddEventPanel" unique_id=1115614725]
+layout_mode = 2
+text = "Content / Notes"
+
+[node name="EventContentField" type="TextEdit" parent="RightSide/RightPanel/ContactViewPanel/AddEventPanel" unique_id=927247828]
+unique_name_in_owner = true
+custom_minimum_size = Vector2(0, 60)
+layout_mode = 2
+placeholder_text = "Email body, notes..."
+
+[node name="LinkRow" type="HBoxContainer" parent="RightSide/RightPanel/ContactViewPanel/AddEventPanel" unique_id=877710706]
+layout_mode = 2
+
+[node name="LinkLabel" type="Label" parent="RightSide/RightPanel/ContactViewPanel/AddEventPanel/LinkRow" unique_id=1080708287]
+custom_minimum_size = Vector2(70, 0)
+layout_mode = 2
+text = "Link"
+
+[node name="EventLinkField" type="LineEdit" parent="RightSide/RightPanel/ContactViewPanel/AddEventPanel/LinkRow" unique_id=1345696731]
+unique_name_in_owner = true
+layout_mode = 2
+size_flags_horizontal = 3
+placeholder_text = "thunderbird:// or https://"
+
+[node name="LogEventButton" type="Button" parent="RightSide/RightPanel/ContactViewPanel/AddEventPanel" unique_id=1782722467]
+unique_name_in_owner = true
+layout_mode = 2
+text = "Log Event"

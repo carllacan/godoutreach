@@ -1,0 +1,159 @@
+[gd_scene format=3 uid="uid://dc60io7tovxq3"]
+
+[ext_resource type="Script" uid="uid://biw437uaepb3p" path="res://GUI/Contacts/contacts_tab.gd" id="1_83jby"]
+
+[node name="Contacts" type="HSplitContainer" unique_id=185556015]
+split_offsets = PackedInt32Array(280)
+split_offset = 280
+script = ExtResource("1_83jby")
+
+[node name="LeftPanel" type="VBoxContainer" parent="." unique_id=311889647]
+custom_minimum_size = Vector2(220, 0)
+layout_mode = 2
+
+[node name="AddContactButton" type="Button" parent="LeftPanel" unique_id=385081353]
+unique_name_in_owner = true
+layout_mode = 2
+text = "New Contact"
+
+[node name="ContactList" type="ScrollContainer" parent="LeftPanel" unique_id=212476730]
+layout_mode = 2
+size_flags_vertical = 3
+horizontal_scroll_mode = 0
+
+[node name="ContactListContent" type="VBoxContainer" parent="LeftPanel/ContactList" unique_id=1643127439]
+unique_name_in_owner = true
+layout_mode = 2
+size_flags_horizontal = 3
+
+[node name="RightSide" type="VBoxContainer" parent="." unique_id=767228857]
+layout_mode = 2
+size_flags_horizontal = 3
+
+[node name="NoSelectionLabel" type="Label" parent="RightSide" unique_id=133259253]
+unique_name_in_owner = true
+modulate = Color(1, 1, 1, 0.4)
+layout_mode = 2
+size_flags_vertical = 3
+text = "Select a contact or create a new one."
+horizontal_alignment = 1
+vertical_alignment = 1
+
+[node name="EditorPanel" type="VBoxContainer" parent="RightSide" unique_id=367915822]
+unique_name_in_owner = true
+visible = false
+layout_mode = 2
+size_flags_vertical = 3
+
+[node name="EditorScroll" type="ScrollContainer" parent="RightSide/EditorPanel" unique_id=1146598490]
+layout_mode = 2
+size_flags_vertical = 3
+horizontal_scroll_mode = 0
+
+[node name="EditorContent" type="VBoxContainer" parent="RightSide/EditorPanel/EditorScroll" unique_id=697696104]
+layout_mode = 2
+size_flags_horizontal = 3
+
+[node name="NameRow" type="HBoxContainer" parent="RightSide/EditorPanel/EditorScroll/EditorContent" unique_id=2131821041]
+layout_mode = 2
+
+[node name="NameLabel" type="Label" parent="RightSide/EditorPanel/EditorScroll/EditorContent/NameRow" unique_id=240090569]
+custom_minimum_size = Vector2(90, 0)
+layout_mode = 2
+text = "Name"
+
+[node name="NameField" type="LineEdit" parent="RightSide/EditorPanel/EditorScroll/EditorContent/NameRow" unique_id=2076163454]
+unique_name_in_owner = true
+layout_mode = 2
+size_flags_horizontal = 3
+placeholder_text = "Contact name"
+
+[node name="CategoryRow" type="HBoxContainer" parent="RightSide/EditorPanel/EditorScroll/EditorContent" unique_id=1851828956]
+layout_mode = 2
+
+[node name="CategoryLabel" type="Label" parent="RightSide/EditorPanel/EditorScroll/EditorContent/CategoryRow" unique_id=2144110483]
+custom_minimum_size = Vector2(90, 0)
+layout_mode = 2
+text = "Category"
+
+[node name="CategoryField" type="OptionButton" parent="RightSide/EditorPanel/EditorScroll/EditorContent/CategoryRow" unique_id=701650842]
+unique_name_in_owner = true
+layout_mode = 2
+size_flags_horizontal = 3
+
+[node name="LanguageRow" type="HBoxContainer" parent="RightSide/EditorPanel/EditorScroll/EditorContent" unique_id=190152532]
+layout_mode = 2
+
+[node name="LanguageLabel" type="Label" parent="RightSide/EditorPanel/EditorScroll/EditorContent/LanguageRow" unique_id=606505041]
+custom_minimum_size = Vector2(90, 0)
+layout_mode = 2
+text = "Language"
+
+[node name="LanguageField" type="LineEdit" parent="RightSide/EditorPanel/EditorScroll/EditorContent/LanguageRow" unique_id=1939639419]
+unique_name_in_owner = true
+layout_mode = 2
+size_flags_horizontal = 3
+placeholder_text = "e.g. English, Spanish"
+
+[node name="AbandonedRow" type="HBoxContainer" parent="RightSide/EditorPanel/EditorScroll/EditorContent" unique_id=477640597]
+layout_mode = 2
+
+[node name="AbandonedLabel" type="Label" parent="RightSide/EditorPanel/EditorScroll/EditorContent/AbandonedRow" unique_id=204413771]
+custom_minimum_size = Vector2(90, 0)
+layout_mode = 2
+text = "Abandoned"
+
+[node name="AbandonedCheck" type="CheckBox" parent="RightSide/EditorPanel/EditorScroll/EditorContent/AbandonedRow" unique_id=2128648108]
+unique_name_in_owner = true
+layout_mode = 2
+text = "Channel appears inactive"
+
+[node name="TagsSection" type="VBoxContainer" parent="RightSide/EditorPanel/EditorScroll/EditorContent" unique_id=599761651]
+layout_mode = 2
+
+[node name="TagsHeader" type="Label" parent="RightSide/EditorPanel/EditorScroll/EditorContent/TagsSection" unique_id=530911716]
+layout_mode = 2
+text = "Tags"
+
+[node name="TagsContainer" type="FlowContainer" parent="RightSide/EditorPanel/EditorScroll/EditorContent/TagsSection" unique_id=2108177534]
+unique_name_in_owner = true
+layout_mode = 2
+
+[node name="NotesSection" type="VBoxContainer" parent="RightSide/EditorPanel/EditorScroll/EditorContent" unique_id=1754081801]
+layout_mode = 2
+
+[node name="NotesHeader" type="Label" parent="RightSide/EditorPanel/EditorScroll/EditorContent/NotesSection" unique_id=1235701591]
+layout_mode = 2
+text = "Notes"
+
+[node name="NotesField" type="TextEdit" parent="RightSide/EditorPanel/EditorScroll/EditorContent/NotesSection" unique_id=126184449]
+unique_name_in_owner = true
+custom_minimum_size = Vector2(0, 80)
+layout_mode = 2
+size_flags_horizontal = 3
+
+[node name="ButtonsRow" type="HBoxContainer" parent="RightSide/EditorPanel/EditorScroll/EditorContent" unique_id=1769726933]
+layout_mode = 2
+
+[node name="SaveButton" type="Button" parent="RightSide/EditorPanel/EditorScroll/EditorContent/ButtonsRow" unique_id=1389626653]
+unique_name_in_owner = true
+layout_mode = 2
+size_flags_horizontal = 3
+text = "Save"
+
+[node name="DeleteButton" type="Button" parent="RightSide/EditorPanel/EditorScroll/EditorContent/ButtonsRow" unique_id=760362133]
+unique_name_in_owner = true
+layout_mode = 2
+disabled = true
+text = "Delete"
+
+[node name="Sep" type="HSeparator" parent="RightSide/EditorPanel/EditorScroll/EditorContent" unique_id=1694040933]
+layout_mode = 2
+
+[node name="TasksHeader" type="Label" parent="RightSide/EditorPanel/EditorScroll/EditorContent" unique_id=1063740139]
+layout_mode = 2
+text = "Tasks for this contact"
+
+[node name="TasksList" type="VBoxContainer" parent="RightSide/EditorPanel/EditorScroll/EditorContent" unique_id=1348511346]
+unique_name_in_owner = true
+layout_mode = 2

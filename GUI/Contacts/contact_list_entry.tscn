@@ -1,0 +1,9 @@
+[gd_scene format=3 uid="uid://bc1321lkaapid"]
+
+[ext_resource type="Script" uid="uid://bnxs53qk577ic" path="res://GUI/Contacts/contact_list_entry.gd" id="1_2d8hu"]
+
+[node name="ContactListEntry" type="Button" unique_id=716598025]
+custom_minimum_size = Vector2(0, 28)
+flat = true
+alignment = 0
+script = ExtResource("1_2d8hu")

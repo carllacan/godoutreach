@@ -1,0 +1,9 @@
+[gd_scene format=3 uid="uid://cqi0och2fas3d"]
+
+[ext_resource type="Script" uid="uid://burttl6qpdeau" path="res://GUI/Games/game_contact_entry.gd" id="1_k4j77"]
+
+[node name="GameContactEntry" type="Button" unique_id=1624202566]
+custom_minimum_size = Vector2(0, 26)
+flat = true
+alignment = 0
+script = ExtResource("1_k4j77")
