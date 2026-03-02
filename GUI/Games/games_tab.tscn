@@ -1,6 +1,7 @@
 [gd_scene format=3 uid="uid://cu3aqe1xv66dp"]
 
 [ext_resource type="Script" uid="uid://dgqiha15lgiae" path="res://GUI/Games/games_tab.gd" id="1_hoger"]
+[ext_resource type="PackedScene" uid="uid://daae6afc5xnql" path="res://GUI/Events/create_event_panel.tscn" id="2_0aigm"]
 
 [node name="Games" type="HSplitContainer" unique_id=1313561299]
 split_offsets = PackedInt32Array(280)
@@ -117,66 +118,6 @@ size_flags_horizontal = 3
 [node name="AddSep" type="HSeparator" parent="RightSide/RightPanel/ContactViewPanel" unique_id=1019924863]
 layout_mode = 2
 
-[node name="AddEventPanel" type="VBoxContainer" parent="RightSide/RightPanel/ContactViewPanel" unique_id=1208874206]
+[node name="CreateEventPanel" parent="RightSide/RightPanel/ContactViewPanel" unique_id=191376110 instance=ExtResource("2_0aigm")]
 unique_name_in_owner = true
 layout_mode = 2
-
-[node name="AddEventHeader" type="Label" parent="RightSide/RightPanel/ContactViewPanel/AddEventPanel" unique_id=436228455]
-layout_mode = 2
-text = "Log Event"
-
-[node name="KindRow" type="HBoxContainer" parent="RightSide/RightPanel/ContactViewPanel/AddEventPanel" unique_id=86627062]
-layout_mode = 2
-
-[node name="KindLabel" type="Label" parent="RightSide/RightPanel/ContactViewPanel/AddEventPanel/KindRow" unique_id=189996607]
-custom_minimum_size = Vector2(70, 0)
-layout_mode = 2
-text = "Kind"
-
-[node name="EventKindField" type="OptionButton" parent="RightSide/RightPanel/ContactViewPanel/AddEventPanel/KindRow" unique_id=1672906882]
-unique_name_in_owner = true
-layout_mode = 2
-size_flags_horizontal = 3
-
-[node name="ChannelRow" type="HBoxContainer" parent="RightSide/RightPanel/ContactViewPanel/AddEventPanel" unique_id=935280315]
-layout_mode = 2
-
-[node name="ChannelLabel" type="Label" parent="RightSide/RightPanel/ContactViewPanel/AddEventPanel/ChannelRow" unique_id=1745492166]
-custom_minimum_size = Vector2(70, 0)
-layout_mode = 2
-text = "Channel"
-
-[node name="EventChannelField" type="LineEdit" parent="RightSide/RightPanel/ContactViewPanel/AddEventPanel/ChannelRow" unique_id=755302560]
-unique_name_in_owner = true
-layout_mode = 2
-size_flags_horizontal = 3
-placeholder_text = "Email, Twitter, Discord..."
-
-[node name="ContentLabel" type="Label" parent="RightSide/RightPanel/ContactViewPanel/AddEventPanel" unique_id=1115614725]
-layout_mode = 2
-text = "Content / Notes"
-
-[node name="EventContentField" type="TextEdit" parent="RightSide/RightPanel/ContactViewPanel/AddEventPanel" unique_id=927247828]
-unique_name_in_owner = true
-custom_minimum_size = Vector2(0, 60)
-layout_mode = 2
-placeholder_text = "Email body, notes..."
-
-[node name="LinkRow" type="HBoxContainer" parent="RightSide/RightPanel/ContactViewPanel/AddEventPanel" unique_id=877710706]
-layout_mode = 2
-
-[node name="LinkLabel" type="Label" parent="RightSide/RightPanel/ContactViewPanel/AddEventPanel/LinkRow" unique_id=1080708287]
-custom_minimum_size = Vector2(70, 0)
-layout_mode = 2
-text = "Link"
-
-[node name="EventLinkField" type="LineEdit" parent="RightSide/RightPanel/ContactViewPanel/AddEventPanel/LinkRow" unique_id=1345696731]
-unique_name_in_owner = true
-layout_mode = 2
-size_flags_horizontal = 3
-placeholder_text = "thunderbird:// or https://"
-
-[node name="LogEventButton" type="Button" parent="RightSide/RightPanel/ContactViewPanel/AddEventPanel" unique_id=1782722467]
-unique_name_in_owner = true
-layout_mode = 2
-text = "Log Event"

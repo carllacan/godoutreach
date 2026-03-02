@@ -14,13 +14,8 @@ var _viewing_contact_id:int = -1
 @onready var contact_view_panel:VBoxContainer = %ContactViewPanel
 @onready var contact_view_title:Label = %ContactViewTitle
 @onready var events_list:VBoxContainer = %EventsList
-@onready var event_kind_field:OptionButton = %EventKindField
-@onready var event_channel_field:LineEdit = %EventChannelField
-@onready var event_content_field:TextEdit = %EventContentField
-@onready var event_link_field:LineEdit = %EventLinkField
 @onready var add_game_button:Button = %AddGameButton
 @onready var game_save_button:Button = %GameSaveButton
-@onready var log_event_button:Button = %LogEventButton
 @onready var back_button:Button = %BackButton
 
 
@@ -28,7 +23,6 @@ func _ready()-> void:
 	add_game_button.pressed.connect(_on_add_game_pressed)
 	game_save_button.pressed.connect(_on_game_save_pressed)
 	game_delete_button.pressed.connect(_on_game_delete_pressed)
-	log_event_button.pressed.connect(_on_log_event_pressed)
 	back_button.pressed.connect(_on_back_pressed)
 	Database.games_changed.connect(_rebuild_game_list)
 	Database.contacts_changed.connect(_rebuild_game_list)
@@ -79,8 +73,8 @@ func _add_game_to_list(game:UserGame)-> void:
 
 
 func _populate_contact_sublists(container:VBoxContainer, game:UserGame)-> void:
-	while container.get_child_count() > 1:
-		container.get_child(1).queue_free()
+	for c in container.get_children().slice(1):
+		container.remove_child(c)
 
 	var categorized = TasksManager.categorize_contacts_for_game(game)
 	var sections = [
@@ -134,7 +128,6 @@ func _show_game_editor(game_id:int)-> void:
 	game_name_field.text = _current_game.name
 	game_delete_button.disabled = false
 	_refresh_game_tags()
-	_refresh_event_kinds()
 
 
 func _refresh_game_tags()-> void:
@@ -158,12 +151,6 @@ func _on_game_tag_toggled(tag_id:int, pressed:bool)-> void:
 		_current_game.tag_ids.erase(tag_id)
 
 
-func _refresh_event_kinds()-> void:
-	event_kind_field.clear()
-	for kind in Database.get_all_event_kinds():
-		event_kind_field.add_item(kind.name, kind.id)
-
-
 func _on_contact_game_selected(contact_id:int, game_id:int)-> void:
 	_current_game = Database.get_user_game(game_id)
 	_viewing_contact_id = contact_id
@@ -173,7 +160,6 @@ func _on_contact_game_selected(contact_id:int, game_id:int)-> void:
 	var contact = Database.get_contact(contact_id)
 	if contact == null: return
 	contact_view_title.text = "%s — %s" % [contact.name, _current_game.name if _current_game else ""]
-	_refresh_event_kinds()
 	_refresh_events()
 
 
@@ -271,23 +257,6 @@ func _on_game_delete_pressed()-> void:
 	)
 	add_child(dialog)
 	dialog.popup_centered()
-
-
-func _on_log_event_pressed()-> void:
-	if _current_game == null or _viewing_contact_id == -1: return
-	if event_kind_field.item_count == 0: return
-	var event = ContactEvent.new()
-	event.contact_id = _viewing_contact_id
-	event.game_id = _current_game.id
-	event.kind_id = event_kind_field.get_selected_id()
-	event.datetime = Time.get_datetime_string_from_system()
-	event.channel = event_channel_field.text.strip_edges()
-	event.content_text = event_content_field.text
-	event.content_link = event_link_field.text.strip_edges()
-	Database.save_contact_event(event)
-	event_channel_field.text = ""
-	event_content_field.text = ""
-	event_link_field.text = ""
 
 
 func _on_back_pressed()-> void:

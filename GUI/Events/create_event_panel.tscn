@@ -1,0 +1,66 @@
+[gd_scene format=3 uid="uid://daae6afc5xnql"]
+
+[ext_resource type="Script" uid="uid://vt68kj70ypxc" path="res://GUI/Events/create_event_panel.gd" id="1_gugsm"]
+
+[node name="AddEventPanel" type="VBoxContainer" unique_id=191376110]
+script = ExtResource("1_gugsm")
+
+[node name="AddEventHeader" type="Label" parent="." unique_id=1362634576]
+layout_mode = 2
+text = "Log Event"
+
+[node name="KindRow" type="HBoxContainer" parent="." unique_id=1303301061]
+layout_mode = 2
+
+[node name="KindLabel" type="Label" parent="KindRow" unique_id=1973899684]
+custom_minimum_size = Vector2(70, 0)
+layout_mode = 2
+text = "Kind"
+
+[node name="EventKindField" type="OptionButton" parent="KindRow" unique_id=1593981068]
+unique_name_in_owner = true
+layout_mode = 2
+size_flags_horizontal = 3
+
+[node name="ChannelRow" type="HBoxContainer" parent="." unique_id=610899640]
+layout_mode = 2
+
+[node name="ChannelLabel" type="Label" parent="ChannelRow" unique_id=2105718195]
+custom_minimum_size = Vector2(70, 0)
+layout_mode = 2
+text = "Channel"
+
+[node name="EventChannelField" type="LineEdit" parent="ChannelRow" unique_id=1275540863]
+unique_name_in_owner = true
+layout_mode = 2
+size_flags_horizontal = 3
+placeholder_text = "Email, Twitter, Discord..."
+
+[node name="ContentLabel" type="Label" parent="." unique_id=123965617]
+layout_mode = 2
+text = "Content / Notes"
+
+[node name="EventContentField" type="TextEdit" parent="." unique_id=1531045316]
+unique_name_in_owner = true
+custom_minimum_size = Vector2(0, 60)
+layout_mode = 2
+placeholder_text = "Email body, notes..."
+
+[node name="LinkRow" type="HBoxContainer" parent="." unique_id=93454031]
+layout_mode = 2
+
+[node name="LinkLabel" type="Label" parent="LinkRow" unique_id=878927406]
+custom_minimum_size = Vector2(70, 0)
+layout_mode = 2
+text = "Link"
+
+[node name="EventLinkField" type="LineEdit" parent="LinkRow" unique_id=51490599]
+unique_name_in_owner = true
+layout_mode = 2
+size_flags_horizontal = 3
+placeholder_text = "thunderbird:// or https://"
+
+[node name="LogEventButton" type="Button" parent="." unique_id=1176318288]
+unique_name_in_owner = true
+layout_mode = 2
+text = "Log Event"
