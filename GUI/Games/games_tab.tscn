@@ -46,42 +46,105 @@ visible = false
 layout_mode = 2
 size_flags_vertical = 3
 
-[node name="GameEditorPanel" type="VBoxContainer" parent="RightSide/RightPanel" unique_id=429978506]
+[node name="EditorScroll" type="ScrollContainer" parent="RightSide/RightPanel" unique_id=100000020]
 unique_name_in_owner = true
 layout_mode = 2
+size_flags_vertical = 3
+horizontal_scroll_mode = 0
 
-[node name="NameRow" type="HBoxContainer" parent="RightSide/RightPanel/GameEditorPanel" unique_id=336097816]
+[node name="GameEditorPanel" type="VBoxContainer" parent="RightSide/RightPanel/EditorScroll" unique_id=429978506]
+unique_name_in_owner = true
+layout_mode = 2
+size_flags_horizontal = 3
+
+[node name="NameRow" type="HBoxContainer" parent="RightSide/RightPanel/EditorScroll/GameEditorPanel" unique_id=336097816]
 layout_mode = 2
 
-[node name="NameLabel" type="Label" parent="RightSide/RightPanel/GameEditorPanel/NameRow" unique_id=629963851]
+[node name="NameLabel" type="Label" parent="RightSide/RightPanel/EditorScroll/GameEditorPanel/NameRow" unique_id=629963851]
 custom_minimum_size = Vector2(90, 0)
 layout_mode = 2
 text = "Game Name"
 
-[node name="GameNameField" type="LineEdit" parent="RightSide/RightPanel/GameEditorPanel/NameRow" unique_id=292294293]
+[node name="GameNameField" type="LineEdit" parent="RightSide/RightPanel/EditorScroll/GameEditorPanel/NameRow" unique_id=292294293]
 unique_name_in_owner = true
 layout_mode = 2
 size_flags_horizontal = 3
 placeholder_text = "Game name"
 
-[node name="TagsHeader" type="Label" parent="RightSide/RightPanel/GameEditorPanel" unique_id=2098689193]
+[node name="TagsHeader" type="Label" parent="RightSide/RightPanel/EditorScroll/GameEditorPanel" unique_id=2098689193]
 layout_mode = 2
 text = "Tags"
 
-[node name="GameTagsContainer" type="FlowContainer" parent="RightSide/RightPanel/GameEditorPanel" unique_id=1178643037]
+[node name="AddTagRow" type="HBoxContainer" parent="RightSide/RightPanel/EditorScroll/GameEditorPanel" unique_id=100000001]
+layout_mode = 2
+
+[node name="AddGameTagField" type="LineEdit" parent="RightSide/RightPanel/EditorScroll/GameEditorPanel/AddTagRow" unique_id=100000002]
+unique_name_in_owner = true
+layout_mode = 2
+size_flags_horizontal = 3
+placeholder_text = "New tag name"
+
+[node name="AddGameTagButton" type="Button" parent="RightSide/RightPanel/EditorScroll/GameEditorPanel/AddTagRow" unique_id=100000003]
+unique_name_in_owner = true
+layout_mode = 2
+text = "+ Tag"
+
+[node name="GameTagsContainer" type="FlowContainer" parent="RightSide/RightPanel/EditorScroll/GameEditorPanel" unique_id=1178643037]
 unique_name_in_owner = true
 layout_mode = 2
 
-[node name="ButtonsRow" type="HBoxContainer" parent="RightSide/RightPanel/GameEditorPanel" unique_id=1819690298]
+[node name="LinksHeader" type="Label" parent="RightSide/RightPanel/EditorScroll/GameEditorPanel" unique_id=100000004]
+layout_mode = 2
+text = "Links"
+
+[node name="GameLinksContainer" type="VBoxContainer" parent="RightSide/RightPanel/EditorScroll/GameEditorPanel" unique_id=100000005]
+unique_name_in_owner = true
 layout_mode = 2
 
-[node name="GameSaveButton" type="Button" parent="RightSide/RightPanel/GameEditorPanel/ButtonsRow" unique_id=1175013980]
+[node name="AddLinkButton" type="Button" parent="RightSide/RightPanel/EditorScroll/GameEditorPanel" unique_id=100000006]
+unique_name_in_owner = true
+layout_mode = 2
+text = "+ Add link"
+alignment = 0
+
+[node name="ShortDescsHeader" type="Label" parent="RightSide/RightPanel/EditorScroll/GameEditorPanel" unique_id=100000007]
+layout_mode = 2
+text = "Short Descriptions"
+
+[node name="ShortDescsContainer" type="VBoxContainer" parent="RightSide/RightPanel/EditorScroll/GameEditorPanel" unique_id=100000008]
+unique_name_in_owner = true
+layout_mode = 2
+
+[node name="AddShortDescButton" type="Button" parent="RightSide/RightPanel/EditorScroll/GameEditorPanel" unique_id=100000009]
+unique_name_in_owner = true
+layout_mode = 2
+text = "+ Add short description"
+alignment = 0
+
+[node name="LongDescsHeader" type="Label" parent="RightSide/RightPanel/EditorScroll/GameEditorPanel" unique_id=100000010]
+layout_mode = 2
+text = "Long Descriptions"
+
+[node name="LongDescsContainer" type="VBoxContainer" parent="RightSide/RightPanel/EditorScroll/GameEditorPanel" unique_id=100000011]
+unique_name_in_owner = true
+layout_mode = 2
+
+[node name="AddLongDescButton" type="Button" parent="RightSide/RightPanel/EditorScroll/GameEditorPanel" unique_id=100000012]
+unique_name_in_owner = true
+layout_mode = 2
+text = "+ Add long description"
+alignment = 0
+
+[node name="ButtonsRow" type="HBoxContainer" parent="RightSide/RightPanel/EditorScroll/GameEditorPanel" unique_id=1819690298]
+layout_mode = 2
+
+[node name="GameSaveButton" type="Button" parent="RightSide/RightPanel/EditorScroll/GameEditorPanel/ButtonsRow" unique_id=1175013980]
 unique_name_in_owner = true
 layout_mode = 2
 size_flags_horizontal = 3
 text = "Save"
 
-[node name="GameDeleteButton" type="Button" parent="RightSide/RightPanel/GameEditorPanel/ButtonsRow" unique_id=2046762289]
+[node name="GameDeleteButton" type="Button" parent="RightSide/RightPanel/EditorScroll/GameEditorPanel/ButtonsRow" unique_id=2046762289]
 unique_name_in_owner = true
 layout_mode = 2
 disabled = true
@@ -111,6 +174,16 @@ size_flags_vertical = 3
 horizontal_scroll_mode = 0
 
 [node name="EventsList" type="VBoxContainer" parent="RightSide/RightPanel/ContactViewPanel/EventsScroll" unique_id=1312976945]
+unique_name_in_owner = true
+layout_mode = 2
+size_flags_horizontal = 3
+
+[node name="TasksScroll" type="ScrollContainer" parent="RightSide/RightPanel/ContactViewPanel" unique_id=215257905]
+layout_mode = 2
+size_flags_vertical = 3
+horizontal_scroll_mode = 0
+
+[node name="TasksList" type="VBoxContainer" parent="RightSide/RightPanel/ContactViewPanel/TasksScroll" unique_id=74010209]
 unique_name_in_owner = true
 layout_mode = 2
 size_flags_horizontal = 3
