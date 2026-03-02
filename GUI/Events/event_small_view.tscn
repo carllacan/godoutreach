@@ -1,0 +1,29 @@
+[gd_scene format=3 uid="uid://xifn6awkv7a8"]
+
+[ext_resource type="Script" uid="uid://esv1234567890" path="res://GUI/Events/event_small_view.gd" id="1_esv"]
+
+[node name="EventSmallView" type="PanelContainer"]
+script = ExtResource("1_esv")
+
+[node name="VBoxContainer" type="VBoxContainer" parent="."]
+layout_mode = 2
+
+[node name="HeaderLabel" type="Label" parent="VBoxContainer"]
+unique_name_in_owner = true
+layout_mode = 2
+modulate = Color(0.39215687, 0.58431375, 0.92941177, 1)
+
+[node name="BodyLabel" type="Label" parent="VBoxContainer"]
+unique_name_in_owner = true
+layout_mode = 2
+autowrap_mode = 3
+
+[node name="LinkLabel" type="Label" parent="VBoxContainer"]
+unique_name_in_owner = true
+layout_mode = 2
+modulate = Color(0.6, 0.8, 1.0, 1)
+
+[node name="DeleteButton" type="Button" parent="VBoxContainer"]
+unique_name_in_owner = true
+layout_mode = 2
+text = "Delete event"

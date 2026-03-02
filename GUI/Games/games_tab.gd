@@ -7,6 +7,12 @@ var _viewing_contact_id:int = -1
 @onready var game_list_content:VBoxContainer = %GameListContent
 @onready var right_panel:VBoxContainer = %RightPanel
 @onready var no_selection_label:Label = %NoSelectionLabel
+
+@onready var add_game_button:Button = %AddGameButton
+@onready var game_save_button:Button = %GameSaveButton
+
+@onready var back_button:Button = %BackButton
+
 @onready var editor_scroll:ScrollContainer = %EditorScroll
 @onready var game_editor_panel:VBoxContainer = %GameEditorPanel
 @onready var game_name_field:LineEdit = %GameNameField
@@ -16,17 +22,20 @@ var _viewing_contact_id:int = -1
 @onready var contact_view_title:Label = %ContactViewTitle
 @onready var events_list:VBoxContainer = %EventsList
 @onready var tasks_list:VBoxContainer = %TasksList
-@onready var add_game_button:Button = %AddGameButton
-@onready var game_save_button:Button = %GameSaveButton
-@onready var back_button:Button = %BackButton
+
+
 @onready var add_game_tag_field:LineEdit = %AddGameTagField
 @onready var add_game_tag_button:Button = %AddGameTagButton
+
 @onready var game_links_container:VBoxContainer = %GameLinksContainer
 @onready var add_link_button:Button = %AddLinkButton
+
 @onready var short_descs_container:VBoxContainer = %ShortDescsContainer
 @onready var add_short_desc_button:Button = %AddShortDescButton
 @onready var long_descs_container:VBoxContainer = %LongDescsContainer
 @onready var add_long_desc_button:Button = %AddLongDescButton
+
+@onready var event_panel = %CreateEventPanel
 
 
 func _ready()-> void:
@@ -302,6 +311,9 @@ func _on_contact_game_selected(contact_id:int, game_id:int)-> void:
 	if contact == null: return
 	contact_view_title.text = "%s — %s" % [contact.name, _current_game.name if _current_game else ""]
 	_refresh_events()
+	
+	event_panel.contact = contact_id
+	event_panel.game = _current_game
 
 
 func _refresh_events()-> void:
@@ -317,47 +329,15 @@ func _refresh_events()-> void:
 		events_list.add_child(lbl)
 	else:
 		for event in events:
-			var panel = PanelContainer.new()
-			var vbox = VBoxContainer.new()
-			panel.add_child(vbox)
-			var header = Label.new()
-			header.text = "[%s] %s" % [event.kind_name, event.datetime]
-			if not event.channel.is_empty():
-				header.text += " via " + event.channel
-			header.modulate = Color.CORNFLOWER_BLUE
-			vbox.add_child(header)
-			if not event.content_text.is_empty():
-				var body = Label.new()
-				body.text = event.content_text
-				body.autowrap_mode = TextServer.AUTOWRAP_WORD_SMART
-				vbox.add_child(body)
-			if not event.content_link.is_empty():
-				var link_lbl = Label.new()
-				link_lbl.text = "Link: " + event.content_link
-				link_lbl.modulate = Color(0.6, 0.8, 1.0)
-				vbox.add_child(link_lbl)
-			var del_btn = Button.new()
-			del_btn.text = "Delete event"
-			var event_id = event.id
-			del_btn.pressed.connect(func(): Database.delete_contact_event(event_id))
-			vbox.add_child(del_btn)
-			events_list.add_child(panel)
+			events_list.add_child(EventSmallView.create(event))
 
-	# Rebuild tasks
 	for child in tasks_list.get_children():
 		child.queue_free()
-		
 	var contact = Database.get_contact(_viewing_contact_id)
 	if contact == null: return
 	var task = TasksManager._get_task_for_contact_game(contact, _current_game)
 	if task != null:
-		tasks_list.add_child(HSeparator.new())
-		var suggestion = Label.new()
-		var status = "PENDING" if task.status == Task.Status.Pending else "WAITING"
-		suggestion.text = "Suggested: [%s] %s" % [status, task.description]
-		suggestion.modulate = Color.YELLOW
-		suggestion.autowrap_mode = TextServer.AUTOWRAP_WORD_SMART
-		tasks_list.add_child(suggestion)
+		tasks_list.add_child(TaskSmallView.create(task))
 
 
 func _on_events_changed()-> void:
