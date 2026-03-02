@@ -112,18 +112,7 @@ func _refresh_tasks()-> void:
 		tasks_list.add_child(lbl)
 		return
 	for task in tasks:
-		var hbox = HBoxContainer.new()
-		var status_lbl = Label.new()
-		status_lbl.text = "[PENDING]" if task.status == Task.Status.Pending else "[WAITING]"
-		status_lbl.modulate = Color.ORANGE if task.status == Task.Status.Pending else Color.CORNFLOWER_BLUE
-		status_lbl.custom_minimum_size.x = 90
-		var desc_lbl = Label.new()
-		desc_lbl.text = task.game_name + ": " + task.description
-		desc_lbl.autowrap_mode = TextServer.AUTOWRAP_WORD_SMART
-		desc_lbl.size_flags_horizontal = Control.SIZE_EXPAND_FILL
-		hbox.add_child(status_lbl)
-		hbox.add_child(desc_lbl)
-		tasks_list.add_child(hbox)
+		tasks_list.add_child(TaskSmallView.create(task))
 
 
 func _show_editor(show:bool)-> void:

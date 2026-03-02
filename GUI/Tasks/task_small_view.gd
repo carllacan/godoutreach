@@ -27,4 +27,6 @@ func make()-> void:
 	if not is_node_ready(): return
 	if task == null: return
 	var status = "PENDING" if task.status == Task.Status.Pending else "WAITING"
-	desc_label.text = "Suggested: [%s] %s" % [status, task.description]
+	desc_label.modulate = Color.ORANGE if task.status == Task.Status.Pending else Color.CORNFLOWER_BLUE
+	var prefix = "%s: " % task.game_name if not task.game_name.is_empty() else ""
+	desc_label.text = "[%s] %s%s" % [status, prefix, task.description]
