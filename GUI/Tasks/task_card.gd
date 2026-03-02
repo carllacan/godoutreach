@@ -18,6 +18,10 @@ static func create(t:Task)-> PanelContainer:
 	return card
 
 
+func _ready()-> void:
+	make()
+
+
 func set_task(new_value:Task)-> void:
 	task = new_value
 	make()

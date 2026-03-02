@@ -32,13 +32,13 @@ func rebuild()-> void:
 	for child in waiting_cards.get_children():
 		child.queue_free()
 
-	var selected_game_id = game_filter.get_selected_id() if game_filter.item_count > 0 else -1
 	var tasks:Array[Task] = []
+	var selected_idx = game_filter.selected
 
-	if selected_game_id == -1:
+	if selected_idx <= 0:
 		tasks = TasksManager.get_all_tasks()
 	else:
-		var game = Database.get_user_game(selected_game_id)
+		var game = Database.get_user_game(game_filter.get_item_id(selected_idx))
 		if game != null:
 			tasks = TasksManager.get_tasks_for_game(game)
 
