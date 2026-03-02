@@ -19,7 +19,15 @@ static func create(t:Task)-> PanelContainer:
 
 
 func _ready()-> void:
+	mouse_default_cursor_shape = Control.CURSOR_POINTING_HAND
+	gui_input.connect(_on_gui_input)
 	make()
+
+
+func _on_gui_input(event:InputEvent)-> void:
+	if event is InputEventMouseButton and event.pressed and event.button_index == MOUSE_BUTTON_LEFT:
+		if task != null:
+			TaskActionWindow.open_for_task(task, get_tree().root)
 
 
 func set_task(new_value:Task)-> void:
