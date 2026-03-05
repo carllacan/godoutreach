@@ -18,6 +18,7 @@ func fetch_for_contact(contact:Contact)-> void:
 		return
 	var api_key = Database.get_setting(_API_KEY_SETTING)
 	if api_key.is_empty():
+		push_error("No Youtube API key defined in settings!")
 		return
 	var url = _get_youtube_url(contact)
 	if url.is_empty():

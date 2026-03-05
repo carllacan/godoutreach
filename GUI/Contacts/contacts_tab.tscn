@@ -2,7 +2,26 @@
 
 [ext_resource type="Script" uid="uid://biw437uaepb3p" path="res://GUI/Contacts/contacts_tab.gd" id="1_83jby"]
 
+[sub_resource type="GDScript" id="GDScript_83jby"]
+script/source = "extends VBoxContainer
+
+
+# Called when the node enters the scene tree for the first time.
+func _ready() -> void:
+	pass # Replace with function body.
+
+
+# Called every frame. 'delta' is the elapsed time since the previous frame.
+func _process(delta: float) -> void:
+	pass
+"
+
 [node name="Contacts" type="HSplitContainer" unique_id=185556015]
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
 split_offsets = PackedInt32Array(280)
 split_offset = 280
 script = ExtResource("1_83jby")
@@ -32,6 +51,7 @@ size_flags_horizontal = 3
 
 [node name="NoSelectionLabel" type="Label" parent="RightSide" unique_id=133259253]
 unique_name_in_owner = true
+visible = false
 modulate = Color(1, 1, 1, 0.4)
 layout_mode = 2
 size_flags_vertical = 3
@@ -41,7 +61,6 @@ vertical_alignment = 1
 
 [node name="EditorPanel" type="VBoxContainer" parent="RightSide" unique_id=367915822]
 unique_name_in_owner = true
-visible = false
 layout_mode = 2
 size_flags_vertical = 3
 
@@ -50,127 +69,231 @@ layout_mode = 2
 size_flags_vertical = 3
 horizontal_scroll_mode = 0
 
-[node name="EditorContent" type="VBoxContainer" parent="RightSide/EditorPanel/EditorScroll" unique_id=697696104]
+[node name="EditorContent" type="HBoxContainer" parent="RightSide/EditorPanel/EditorScroll" unique_id=29351149]
 layout_mode = 2
 size_flags_horizontal = 3
 
-[node name="NameRow" type="HBoxContainer" parent="RightSide/EditorPanel/EditorScroll/EditorContent" unique_id=2131821041]
+[node name="GeneralInfo" type="VBoxContainer" parent="RightSide/EditorPanel/EditorScroll/EditorContent" unique_id=1494554456]
+layout_mode = 2
+size_flags_horizontal = 3
+
+[node name="BasicInfo" type="PanelContainer" parent="RightSide/EditorPanel/EditorScroll/EditorContent/GeneralInfo" unique_id=241898217]
 layout_mode = 2
 
-[node name="NameLabel" type="Label" parent="RightSide/EditorPanel/EditorScroll/EditorContent/NameRow" unique_id=240090569]
+[node name="VBoxContainer" type="VBoxContainer" parent="RightSide/EditorPanel/EditorScroll/EditorContent/GeneralInfo/BasicInfo" unique_id=2144534679]
+layout_mode = 2
+
+[node name="NameRow" type="HBoxContainer" parent="RightSide/EditorPanel/EditorScroll/EditorContent/GeneralInfo/BasicInfo/VBoxContainer" unique_id=2131821041]
+layout_mode = 2
+
+[node name="NameLabel" type="Label" parent="RightSide/EditorPanel/EditorScroll/EditorContent/GeneralInfo/BasicInfo/VBoxContainer/NameRow" unique_id=240090569]
 custom_minimum_size = Vector2(90, 0)
 layout_mode = 2
 text = "Name"
 
-[node name="NameField" type="LineEdit" parent="RightSide/EditorPanel/EditorScroll/EditorContent/NameRow" unique_id=2076163454]
+[node name="NameField" type="LineEdit" parent="RightSide/EditorPanel/EditorScroll/EditorContent/GeneralInfo/BasicInfo/VBoxContainer/NameRow" unique_id=2076163454]
 unique_name_in_owner = true
 layout_mode = 2
 size_flags_horizontal = 3
 placeholder_text = "Contact name"
 
-[node name="CategoryRow" type="HBoxContainer" parent="RightSide/EditorPanel/EditorScroll/EditorContent" unique_id=1851828956]
+[node name="CategoryRow" type="HBoxContainer" parent="RightSide/EditorPanel/EditorScroll/EditorContent/GeneralInfo/BasicInfo/VBoxContainer" unique_id=1851828956]
 layout_mode = 2
 
-[node name="CategoryLabel" type="Label" parent="RightSide/EditorPanel/EditorScroll/EditorContent/CategoryRow" unique_id=2144110483]
+[node name="CategoryLabel" type="Label" parent="RightSide/EditorPanel/EditorScroll/EditorContent/GeneralInfo/BasicInfo/VBoxContainer/CategoryRow" unique_id=2144110483]
 custom_minimum_size = Vector2(90, 0)
 layout_mode = 2
 text = "Category"
 
-[node name="CategoryField" type="OptionButton" parent="RightSide/EditorPanel/EditorScroll/EditorContent/CategoryRow" unique_id=701650842]
+[node name="CategoryField" type="OptionButton" parent="RightSide/EditorPanel/EditorScroll/EditorContent/GeneralInfo/BasicInfo/VBoxContainer/CategoryRow" unique_id=701650842]
 unique_name_in_owner = true
 layout_mode = 2
 size_flags_horizontal = 3
 
-[node name="LanguageRow" type="HBoxContainer" parent="RightSide/EditorPanel/EditorScroll/EditorContent" unique_id=190152532]
+[node name="HBoxContainer" type="HBoxContainer" parent="RightSide/EditorPanel/EditorScroll/EditorContent/GeneralInfo/BasicInfo/VBoxContainer" unique_id=1721678149]
 layout_mode = 2
 
-[node name="LanguageLabel" type="Label" parent="RightSide/EditorPanel/EditorScroll/EditorContent/LanguageRow" unique_id=606505041]
+[node name="LanguageRow" type="HBoxContainer" parent="RightSide/EditorPanel/EditorScroll/EditorContent/GeneralInfo/BasicInfo/VBoxContainer/HBoxContainer" unique_id=190152532]
+layout_mode = 2
+
+[node name="LanguageLabel" type="Label" parent="RightSide/EditorPanel/EditorScroll/EditorContent/GeneralInfo/BasicInfo/VBoxContainer/HBoxContainer/LanguageRow" unique_id=606505041]
 custom_minimum_size = Vector2(90, 0)
 layout_mode = 2
 text = "Language"
 
-[node name="LanguageField" type="LineEdit" parent="RightSide/EditorPanel/EditorScroll/EditorContent/LanguageRow" unique_id=1939639419]
+[node name="LanguageField" type="LineEdit" parent="RightSide/EditorPanel/EditorScroll/EditorContent/GeneralInfo/BasicInfo/VBoxContainer/HBoxContainer/LanguageRow" unique_id=1939639419]
 unique_name_in_owner = true
 layout_mode = 2
 size_flags_horizontal = 3
 placeholder_text = "e.g. English, Spanish"
 
-[node name="AbandonedRow" type="HBoxContainer" parent="RightSide/EditorPanel/EditorScroll/EditorContent" unique_id=477640597]
+[node name="AbandonedRow" type="HBoxContainer" parent="RightSide/EditorPanel/EditorScroll/EditorContent/GeneralInfo/BasicInfo/VBoxContainer/HBoxContainer" unique_id=477640597]
 layout_mode = 2
 
-[node name="AbandonedLabel" type="Label" parent="RightSide/EditorPanel/EditorScroll/EditorContent/AbandonedRow" unique_id=204413771]
+[node name="AbandonedLabel" type="Label" parent="RightSide/EditorPanel/EditorScroll/EditorContent/GeneralInfo/BasicInfo/VBoxContainer/HBoxContainer/AbandonedRow" unique_id=204413771]
+visible = false
 custom_minimum_size = Vector2(90, 0)
 layout_mode = 2
 text = "Abandoned"
 
-[node name="AbandonedCheck" type="CheckBox" parent="RightSide/EditorPanel/EditorScroll/EditorContent/AbandonedRow" unique_id=2128648108]
+[node name="AbandonedCheck" type="CheckBox" parent="RightSide/EditorPanel/EditorScroll/EditorContent/GeneralInfo/BasicInfo/VBoxContainer/HBoxContainer/AbandonedRow" unique_id=2128648108]
 unique_name_in_owner = true
 layout_mode = 2
-text = "Channel appears inactive"
+tooltip_text = "Check this if the channel seems to have been abandoned."
+text = "Abandoned"
 
-[node name="TagsSection" type="VBoxContainer" parent="RightSide/EditorPanel/EditorScroll/EditorContent" unique_id=599761651]
+[node name="NotesSection" type="VBoxContainer" parent="RightSide/EditorPanel/EditorScroll/EditorContent/GeneralInfo/BasicInfo/VBoxContainer" unique_id=1754081801]
 layout_mode = 2
 
-[node name="TagsHeader" type="Label" parent="RightSide/EditorPanel/EditorScroll/EditorContent/TagsSection" unique_id=530911716]
-layout_mode = 2
-text = "Tags"
-
-[node name="TagsContainer" type="FlowContainer" parent="RightSide/EditorPanel/EditorScroll/EditorContent/TagsSection" unique_id=2108177534]
-unique_name_in_owner = true
-layout_mode = 2
-
-[node name="LinksSection" type="VBoxContainer" parent="RightSide/EditorPanel/EditorScroll/EditorContent" unique_id=400000001]
-layout_mode = 2
-
-[node name="LinksHeader" type="Label" parent="RightSide/EditorPanel/EditorScroll/EditorContent/LinksSection" unique_id=400000002]
-layout_mode = 2
-text = "Links"
-
-[node name="LinksContainer" type="VBoxContainer" parent="RightSide/EditorPanel/EditorScroll/EditorContent/LinksSection" unique_id=400000003]
-unique_name_in_owner = true
-layout_mode = 2
-
-[node name="AddLinkButton" type="Button" parent="RightSide/EditorPanel/EditorScroll/EditorContent/LinksSection" unique_id=400000004]
-unique_name_in_owner = true
-layout_mode = 2
-text = "+ Add link"
-alignment = 0
-
-[node name="NotesSection" type="VBoxContainer" parent="RightSide/EditorPanel/EditorScroll/EditorContent" unique_id=1754081801]
-layout_mode = 2
-
-[node name="NotesHeader" type="Label" parent="RightSide/EditorPanel/EditorScroll/EditorContent/NotesSection" unique_id=1235701591]
+[node name="NotesHeader" type="Label" parent="RightSide/EditorPanel/EditorScroll/EditorContent/GeneralInfo/BasicInfo/VBoxContainer/NotesSection" unique_id=1235701591]
 layout_mode = 2
 text = "Notes"
 
-[node name="NotesField" type="TextEdit" parent="RightSide/EditorPanel/EditorScroll/EditorContent/NotesSection" unique_id=126184449]
+[node name="NotesField" type="TextEdit" parent="RightSide/EditorPanel/EditorScroll/EditorContent/GeneralInfo/BasicInfo/VBoxContainer/NotesSection" unique_id=126184449]
 unique_name_in_owner = true
 custom_minimum_size = Vector2(0, 80)
 layout_mode = 2
 size_flags_horizontal = 3
 
-[node name="ButtonsRow" type="HBoxContainer" parent="RightSide/EditorPanel/EditorScroll/EditorContent" unique_id=1769726933]
+[node name="HSeparator" type="HSeparator" parent="RightSide/EditorPanel/EditorScroll/EditorContent/GeneralInfo/BasicInfo/VBoxContainer" unique_id=1751706587]
 layout_mode = 2
 
-[node name="SaveButton" type="Button" parent="RightSide/EditorPanel/EditorScroll/EditorContent/ButtonsRow" unique_id=1389626653]
+[node name="TagsSection" type="VBoxContainer" parent="RightSide/EditorPanel/EditorScroll/EditorContent/GeneralInfo/BasicInfo/VBoxContainer" unique_id=599761651]
+layout_mode = 2
+
+[node name="TagsHeader" type="Label" parent="RightSide/EditorPanel/EditorScroll/EditorContent/GeneralInfo/BasicInfo/VBoxContainer/TagsSection" unique_id=530911716]
+layout_mode = 2
+text = "Tags"
+
+[node name="TagsContainer" type="FlowContainer" parent="RightSide/EditorPanel/EditorScroll/EditorContent/GeneralInfo/BasicInfo/VBoxContainer/TagsSection" unique_id=2108177534]
+unique_name_in_owner = true
+layout_mode = 2
+
+[node name="LinksSection2" type="PanelContainer" parent="RightSide/EditorPanel/EditorScroll/EditorContent/GeneralInfo" unique_id=401109019]
+layout_mode = 2
+
+[node name="LinksSection" type="VBoxContainer" parent="RightSide/EditorPanel/EditorScroll/EditorContent/GeneralInfo/LinksSection2" unique_id=400000001]
+layout_mode = 2
+
+[node name="LinksHeader" type="Label" parent="RightSide/EditorPanel/EditorScroll/EditorContent/GeneralInfo/LinksSection2/LinksSection" unique_id=400000002]
+layout_mode = 2
+text = "Links"
+
+[node name="LinksContainer" type="VBoxContainer" parent="RightSide/EditorPanel/EditorScroll/EditorContent/GeneralInfo/LinksSection2/LinksSection" unique_id=400000003]
+unique_name_in_owner = true
+layout_mode = 2
+
+[node name="AddLinkButton" type="Button" parent="RightSide/EditorPanel/EditorScroll/EditorContent/GeneralInfo/LinksSection2/LinksSection" unique_id=400000004]
+unique_name_in_owner = true
+layout_mode = 2
+text = "+ Add link"
+alignment = 0
+
+[node name="ButtonsRow" type="HBoxContainer" parent="RightSide/EditorPanel/EditorScroll/EditorContent/GeneralInfo" unique_id=1769726933]
+layout_mode = 2
+
+[node name="SaveButton" type="Button" parent="RightSide/EditorPanel/EditorScroll/EditorContent/GeneralInfo/ButtonsRow" unique_id=1389626653]
 unique_name_in_owner = true
 layout_mode = 2
 size_flags_horizontal = 3
 text = "Save"
 
-[node name="DeleteButton" type="Button" parent="RightSide/EditorPanel/EditorScroll/EditorContent/ButtonsRow" unique_id=760362133]
+[node name="DeleteButton" type="Button" parent="RightSide/EditorPanel/EditorScroll/EditorContent/GeneralInfo/ButtonsRow" unique_id=760362133]
 unique_name_in_owner = true
 layout_mode = 2
 disabled = true
 text = "Delete"
 
-[node name="Sep" type="HSeparator" parent="RightSide/EditorPanel/EditorScroll/EditorContent" unique_id=1694040933]
+[node name="Sep" type="HSeparator" parent="RightSide/EditorPanel/EditorScroll/EditorContent/GeneralInfo" unique_id=1694040933]
 layout_mode = 2
 
-[node name="TasksHeader" type="Label" parent="RightSide/EditorPanel/EditorScroll/EditorContent" unique_id=1063740139]
+[node name="TasksHeader" type="Label" parent="RightSide/EditorPanel/EditorScroll/EditorContent/GeneralInfo" unique_id=1063740139]
 layout_mode = 2
 text = "Tasks for this contact"
 
-[node name="TasksList" type="VBoxContainer" parent="RightSide/EditorPanel/EditorScroll/EditorContent" unique_id=1348511346]
+[node name="TasksList" type="VBoxContainer" parent="RightSide/EditorPanel/EditorScroll/EditorContent/GeneralInfo" unique_id=1348511346]
 unique_name_in_owner = true
 layout_mode = 2
+
+[node name="Content" type="PanelContainer" parent="RightSide/EditorPanel/EditorScroll/EditorContent" unique_id=437674663]
+layout_mode = 2
+
+[node name="VBoxContainer" type="VBoxContainer" parent="RightSide/EditorPanel/EditorScroll/EditorContent/Content" unique_id=1735212233]
+layout_mode = 2
+
+[node name="ContentHeaderLabel" type="Label" parent="RightSide/EditorPanel/EditorScroll/EditorContent/Content/VBoxContainer" unique_id=1246420571]
+layout_mode = 2
+size_flags_vertical = 0
+text = "CONTENT"
+horizontal_alignment = 1
+
+[node name="ContentTypeTabs" type="TabContainer" parent="RightSide/EditorPanel/EditorScroll/EditorContent/Content/VBoxContainer" unique_id=1013587859]
+layout_mode = 2
+current_tab = 0
+tab_0/title = "Youtube"
+tab_1/title = "Twitch"
+tab_1/disabled = true
+
+[node name="YoutubeContent" type="VBoxContainer" parent="RightSide/EditorPanel/EditorScroll/EditorContent/Content/VBoxContainer/ContentTypeTabs" unique_id=385097213]
+layout_mode = 2
+script = SubResource("GDScript_83jby")
+metadata/_tab_index = 0
+metadata/_tab_name = "Youtube"
+
+[node name="YoutubeInfo" type="VBoxContainer" parent="RightSide/EditorPanel/EditorScroll/EditorContent/Content/VBoxContainer/ContentTypeTabs/YoutubeContent" unique_id=1125342271]
+layout_mode = 2
+
+[node name="ChannelBasicInfo" type="VBoxContainer" parent="RightSide/EditorPanel/EditorScroll/EditorContent/Content/VBoxContainer/ContentTypeTabs/YoutubeContent/YoutubeInfo" unique_id=929673620]
+layout_mode = 2
+
+[node name="ChannelNameLabel" type="Label" parent="RightSide/EditorPanel/EditorScroll/EditorContent/Content/VBoxContainer/ContentTypeTabs/YoutubeContent/YoutubeInfo/ChannelBasicInfo" unique_id=759898290]
+unique_name_in_owner = true
+layout_mode = 2
+text = "Super gaming channel"
+
+[node name="ChannelDescriptionLabel" type="Label" parent="RightSide/EditorPanel/EditorScroll/EditorContent/Content/VBoxContainer/ContentTypeTabs/YoutubeContent/YoutubeInfo/ChannelBasicInfo" unique_id=25239145]
+unique_name_in_owner = true
+layout_mode = 2
+text = "I am a really cool youtuber"
+
+[node name="HBoxContainer3" type="HBoxContainer" parent="RightSide/EditorPanel/EditorScroll/EditorContent/Content/VBoxContainer/ContentTypeTabs/YoutubeContent/YoutubeInfo" unique_id=1772166328]
+layout_mode = 2
+
+[node name="SubscribersHeader" type="Label" parent="RightSide/EditorPanel/EditorScroll/EditorContent/Content/VBoxContainer/ContentTypeTabs/YoutubeContent/YoutubeInfo/HBoxContainer3" unique_id=2070188763]
+layout_mode = 2
+text = "Subscribers:"
+
+[node name="SubscribersAmountLabel" type="Label" parent="RightSide/EditorPanel/EditorScroll/EditorContent/Content/VBoxContainer/ContentTypeTabs/YoutubeContent/YoutubeInfo/HBoxContainer3" unique_id=1473115622]
+unique_name_in_owner = true
+layout_mode = 2
+text = "xyz"
+
+[node name="HBoxContainer2" type="HBoxContainer" parent="RightSide/EditorPanel/EditorScroll/EditorContent/Content/VBoxContainer/ContentTypeTabs/YoutubeContent/YoutubeInfo" unique_id=1255221487]
+layout_mode = 2
+
+[node name="LatestActivityHeader" type="Label" parent="RightSide/EditorPanel/EditorScroll/EditorContent/Content/VBoxContainer/ContentTypeTabs/YoutubeContent/YoutubeInfo/HBoxContainer2" unique_id=793958177]
+layout_mode = 2
+text = "Last activity:"
+
+[node name="LatestActivityLabel" type="Label" parent="RightSide/EditorPanel/EditorScroll/EditorContent/Content/VBoxContainer/ContentTypeTabs/YoutubeContent/YoutubeInfo/HBoxContainer2" unique_id=1563783711]
+unique_name_in_owner = true
+layout_mode = 2
+text = "dd/mm/yyyy"
+
+[node name="YoutubeVideos" type="VBoxContainer" parent="RightSide/EditorPanel/EditorScroll/EditorContent/Content/VBoxContainer/ContentTypeTabs/YoutubeContent" unique_id=1273825181]
+unique_name_in_owner = true
+layout_mode = 2
+
+[node name="TwitchContent" type="VBoxContainer" parent="RightSide/EditorPanel/EditorScroll/EditorContent/Content/VBoxContainer/ContentTypeTabs" unique_id=2044189994]
+visible = false
+layout_mode = 2
+script = SubResource("GDScript_83jby")
+metadata/_tab_index = 1
+metadata/_tab_name = "Twitch"
+
+[node name="TwitchInfo" type="VBoxContainer" parent="RightSide/EditorPanel/EditorScroll/EditorContent/Content/VBoxContainer/ContentTypeTabs/TwitchContent" unique_id=2053414735]
+layout_mode = 2
+
+[node name="TwichNotImplementedLabel" type="Label" parent="RightSide/EditorPanel/EditorScroll/EditorContent/Content/VBoxContainer/ContentTypeTabs/TwitchContent/TwitchInfo" unique_id=1562677761]
+layout_mode = 2
+text = "NOT AVAILABLE"

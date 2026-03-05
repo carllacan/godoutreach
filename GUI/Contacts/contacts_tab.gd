@@ -2,6 +2,7 @@ class_name ContactsTab
 extends HSplitContainer
 
 var _current_contact:Contact = null
+var _subscribers_label:Label
 
 @onready var contact_list_content:VBoxContainer = %ContactListContent
 @onready var editor_panel:VBoxContainer = %EditorPanel
@@ -18,6 +19,10 @@ var _current_contact:Contact = null
 @onready var no_selection_label:Label = %NoSelectionLabel
 @onready var add_contact_button:Button = %AddContactButton
 @onready var save_button:Button = %SaveButton
+@onready var channel_name_label:Label = %ChannelNameLabel
+@onready var channel_description_label:Label = %ChannelDescriptionLabel
+@onready var latest_activity_label:Label = %LatestActivityLabel
+@onready var youtube_videos:VBoxContainer = %YoutubeVideos
 
 
 func _ready()-> void:
@@ -28,6 +33,11 @@ func _ready()-> void:
 	Database.contacts_changed.connect(_rebuild_contact_list)
 	Database.settings_changed.connect(_refresh_categories)
 	Database.events_changed.connect(_refresh_tasks)
+	YoutubeFetcher.fetch_completed.connect(_on_youtube_fetch_completed)
+	# SubscribersAmountLabel is not marked unique — navigate from LatestActivityLabel's parent (YoutubeInfo)
+	_subscribers_label = %LatestActivityLabel.get_parent().get_parent().get_node(
+		"HBoxContainer3/SubscribersAmountLabel"
+	) as Label
 	_rebuild_contact_list()
 	_refresh_categories()
 	_show_editor(false)
@@ -69,6 +79,8 @@ func _load_contact(contact:Contact)-> void:
 	_refresh_tags()
 	_refresh_links()
 	_refresh_tasks()
+	Database.load_contact_youtube(contact)
+	_refresh_youtube()
 
 
 func _refresh_categories()-> void:
@@ -175,6 +187,39 @@ func _show_editor(show:bool)-> void:
 	no_selection_label.visible = not show
 
 
+func _refresh_youtube()-> void:
+	for child in youtube_videos.get_children():
+		child.queue_free()
+	if _current_contact == null:
+		channel_name_label.text = ""
+		channel_description_label.text = ""
+		if _subscribers_label: _subscribers_label.text = ""
+		latest_activity_label.text = ""
+		return
+	channel_name_label.text = _current_contact.youtube_channel_title
+	channel_description_label.text = _current_contact.youtube_channel_description
+	if _subscribers_label:
+		_subscribers_label.text = _fmt_subscribers(_current_contact.youtube_subscribers)
+	latest_activity_label.text = _current_contact.youtube_last_activity.left(10)
+	for video in _current_contact.youtube_videos:
+		youtube_videos.add_child(YoutubeVideoSmallView.create(video))
+
+
+func _fmt_subscribers(n:int)-> String:
+	if n >= 1_000_000:
+		return "%.1fM" % (n / 1_000_000.0)
+	elif n >= 1000:
+		return "%.1fk" % (n / 1000.0)
+	return str(n)
+
+
+func _on_youtube_fetch_completed(contact_id:int, success:bool)-> void:
+	if not success: return
+	if _current_contact == null or _current_contact.id != contact_id: return
+	Database.load_contact_youtube(_current_contact)
+	_refresh_youtube()
+
+
 func _on_add_contact_pressed()-> void:
 	_current_contact = Contact.new()
 	name_field.text = ""
@@ -186,6 +231,7 @@ func _on_add_contact_pressed()-> void:
 	_refresh_tags()
 	_refresh_links()
 	_refresh_tasks()
+	_refresh_youtube()
 	_show_editor(true)
 	name_field.grab_focus()
 
@@ -201,6 +247,7 @@ func _on_save_pressed()-> void:
 	_current_contact.category_id = category_field.get_selected_id()
 	_current_contact.links = _collect_links()
 	Database.save_contact(_current_contact)
+	YoutubeFetcher.fetch_for_contact(_current_contact)
 
 
 func _on_delete_pressed()-> void:
