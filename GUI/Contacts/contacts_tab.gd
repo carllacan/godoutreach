@@ -34,6 +34,9 @@ func _ready()-> void:
 	Database.settings_changed.connect(_refresh_categories)
 	Database.events_changed.connect(_refresh_tasks)
 	YoutubeFetcher.fetch_completed.connect(_on_youtube_fetch_completed)
+	
+	%ImportContactsButton.pressed.connect(_open_import_window)
+	
 	# SubscribersAmountLabel is not marked unique — navigate from LatestActivityLabel's parent (YoutubeInfo)
 	_subscribers_label = %LatestActivityLabel.get_parent().get_parent().get_node(
 		"HBoxContainer3/SubscribersAmountLabel"
@@ -261,3 +264,7 @@ func _on_delete_pressed()-> void:
 	)
 	add_child(dialog)
 	dialog.popup_centered()
+
+
+func _open_import_window()-> void:
+	ImportContactsWindow.open(self)

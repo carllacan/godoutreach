@@ -1,0 +1,100 @@
+[gd_scene format=3 uid="uid://urpnvjsa8oy0"]
+
+[ext_resource type="Script" uid="uid://3e1hq555s1oy" path="res://GUI/Contacts/import_contacts_window.gd" id="1_script"]
+
+[node name="ImportContactsWindow" type="Window" unique_id=1340863305]
+oversampling_override = 1.0
+title = "Import Contacts"
+position = Vector2i(0, 36)
+size = Vector2i(600, 500)
+script = ExtResource("1_script")
+
+[node name="Margin" type="MarginContainer" parent="." unique_id=1014630579]
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+theme_override_constants/margin_left = 12
+theme_override_constants/margin_top = 12
+theme_override_constants/margin_right = 12
+theme_override_constants/margin_bottom = 12
+
+[node name="VBox" type="VBoxContainer" parent="Margin" unique_id=588863147]
+layout_mode = 2
+
+[node name="TitleLabel" type="Label" parent="Margin/VBox" unique_id=179516454]
+layout_mode = 2
+text = "IMPORT CONTACTS"
+horizontal_alignment = 1
+
+[node name="OpenFileButton" type="Button" parent="Margin/VBox" unique_id=1925218562]
+unique_name_in_owner = true
+layout_mode = 2
+text = "Open CSV file..."
+
+[node name="FileDialog" type="FileDialog" parent="Margin/VBox" unique_id=1553067157]
+unique_name_in_owner = true
+title = "Open a File"
+file_mode = 0
+access = 2
+filters = PackedStringArray("*.csv ; CSV Files")
+
+[node name="ResultsSection" type="VBoxContainer" parent="Margin/VBox" unique_id=933991508]
+unique_name_in_owner = true
+visible = false
+layout_mode = 2
+
+[node name="ErrorsSection" type="VBoxContainer" parent="Margin/VBox/ResultsSection" unique_id=1069633471]
+unique_name_in_owner = true
+layout_mode = 2
+
+[node name="ErrorsHeader" type="Label" parent="Margin/VBox/ResultsSection/ErrorsSection" unique_id=1406365472]
+layout_mode = 2
+text = "Errors:"
+
+[node name="ErrorsContainer" type="VBoxContainer" parent="Margin/VBox/ResultsSection/ErrorsSection" unique_id=1996792500]
+unique_name_in_owner = true
+layout_mode = 2
+
+[node name="NewContactsSection" type="VBoxContainer" parent="Margin/VBox/ResultsSection" unique_id=1223076139]
+unique_name_in_owner = true
+layout_mode = 2
+
+[node name="NewContactsHeader" type="Label" parent="Margin/VBox/ResultsSection/NewContactsSection" unique_id=1524379106]
+layout_mode = 2
+text = "New contacts to import:"
+
+[node name="NewContactsScroll" type="ScrollContainer" parent="Margin/VBox/ResultsSection/NewContactsSection" unique_id=363164680]
+custom_minimum_size = Vector2(0, 150)
+layout_mode = 2
+horizontal_scroll_mode = 0
+
+[node name="NewContactsContainer" type="VBoxContainer" parent="Margin/VBox/ResultsSection/NewContactsSection/NewContactsScroll" unique_id=30179128]
+unique_name_in_owner = true
+layout_mode = 2
+size_flags_horizontal = 3
+
+[node name="ExistingContactsSection" type="VBoxContainer" parent="Margin/VBox/ResultsSection" unique_id=208623996]
+unique_name_in_owner = true
+layout_mode = 2
+
+[node name="ExistingContactsHeader" type="Label" parent="Margin/VBox/ResultsSection/ExistingContactsSection" unique_id=1279132457]
+layout_mode = 2
+text = "Already in database (skipped):"
+
+[node name="ExistingContactsScroll" type="ScrollContainer" parent="Margin/VBox/ResultsSection/ExistingContactsSection" unique_id=1845332457]
+custom_minimum_size = Vector2(0, 100)
+layout_mode = 2
+horizontal_scroll_mode = 0
+
+[node name="ExistingContactsContainer" type="VBoxContainer" parent="Margin/VBox/ResultsSection/ExistingContactsSection/ExistingContactsScroll" unique_id=941207630]
+unique_name_in_owner = true
+layout_mode = 2
+size_flags_horizontal = 3
+
+[node name="ImportButton" type="Button" parent="Margin/VBox" unique_id=84547924]
+unique_name_in_owner = true
+layout_mode = 2
+disabled = true
+text = "Import New Contacts"
