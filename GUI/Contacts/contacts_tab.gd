@@ -12,6 +12,8 @@ var _current_contact:Contact = null
 @onready var tags_container:FlowContainer = %TagsContainer
 @onready var notes_field:TextEdit = %NotesField
 @onready var delete_button:Button = %DeleteButton
+@onready var links_container:VBoxContainer = %LinksContainer
+@onready var add_link_button:Button = %AddLinkButton
 @onready var tasks_list:VBoxContainer = %TasksList
 @onready var no_selection_label:Label = %NoSelectionLabel
 @onready var add_contact_button:Button = %AddContactButton
@@ -22,6 +24,7 @@ func _ready()-> void:
 	add_contact_button.pressed.connect(_on_add_contact_pressed)
 	save_button.pressed.connect(_on_save_pressed)
 	delete_button.pressed.connect(_on_delete_pressed)
+	add_link_button.pressed.connect(func(): _add_link_row())
 	Database.contacts_changed.connect(_rebuild_contact_list)
 	Database.settings_changed.connect(_refresh_categories)
 	Database.events_changed.connect(_refresh_tasks)
@@ -64,6 +67,7 @@ func _load_contact(contact:Contact)-> void:
 	delete_button.disabled = false
 	_refresh_categories()
 	_refresh_tags()
+	_refresh_links()
 	_refresh_tasks()
 
 
@@ -100,6 +104,57 @@ func _on_tag_toggled(tag_id:int, pressed:bool)-> void:
 		_current_contact.tag_ids.erase(tag_id)
 
 
+func _refresh_links()-> void:
+	for child in links_container.get_children():
+		child.queue_free()
+	if _current_contact == null: return
+	for link in _current_contact.links:
+		_add_link_row(link.name, link.link)
+
+
+func _add_link_row(link_name:String = "", link_url:String = "")-> void:
+	var row = HBoxContainer.new()
+	var name_dropdown = OptionButton.new()
+	name_dropdown.custom_minimum_size = Vector2(100, 0)
+	for n in Contact.ContactLink.DEFAULT_LINK_NAMES:
+		name_dropdown.add_item(n)
+	var matched = false
+	for i in name_dropdown.item_count:
+		if name_dropdown.get_item_text(i) == link_name:
+			name_dropdown.select(i)
+			matched = true
+			break
+	if not matched and not link_name.is_empty():
+		name_dropdown.add_item(link_name)
+		name_dropdown.select(name_dropdown.item_count - 1)
+	var url_field = LineEdit.new()
+	url_field.placeholder_text = "URL"
+	url_field.text = link_url
+	url_field.size_flags_horizontal = Control.SIZE_EXPAND_FILL
+	var del_btn = Button.new()
+	del_btn.text = "X"
+	del_btn.pressed.connect(func(): row.queue_free())
+	row.add_child(name_dropdown)
+	row.add_child(url_field)
+	row.add_child(del_btn)
+	links_container.add_child(row)
+
+
+func _collect_links()-> Array:
+	var result = []
+	for row in links_container.get_children():
+		var children = row.get_children()
+		if children.size() < 2: continue
+		var link = Contact.ContactLink.new()
+		link.name = (children[0] as OptionButton).get_item_text(
+			(children[0] as OptionButton).selected
+		)
+		link.link = (children[1] as LineEdit).text.strip_edges()
+		if link.link.is_empty(): continue
+		result.append(link)
+	return result
+
+
 func _refresh_tasks()-> void:
 	for child in tasks_list.get_children():
 		child.queue_free()
@@ -129,6 +184,7 @@ func _on_add_contact_pressed()-> void:
 	delete_button.disabled = true
 	_refresh_categories()
 	_refresh_tags()
+	_refresh_links()
 	_refresh_tasks()
 	_show_editor(true)
 	name_field.grab_focus()
@@ -143,6 +199,7 @@ func _on_save_pressed()-> void:
 	_current_contact.abandoned = abandoned_check.button_pressed
 	_current_contact.notes = notes_field.text
 	_current_contact.category_id = category_field.get_selected_id()
+	_current_contact.links = _collect_links()
 	Database.save_contact(_current_contact)
 
 

@@ -1,6 +1,10 @@
 class_name Contact
 
 class ContactLink:
+	const DEFAULT_LINK_NAMES:Array[String] = [
+		"Youtube",
+		"Twitch"
+	]
 	var id:int = -1
 	var name:String = ""
 	var link:String = ""
