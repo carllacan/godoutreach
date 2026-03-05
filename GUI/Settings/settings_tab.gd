@@ -2,6 +2,7 @@ class_name SettingsTab
 extends ScrollContainer
 
 const YOUTUBE_API_KEY = "youtube_api_key"
+const YOUTUBE_STALE_DAYS = "youtube_stale_days"
 
 @onready var tags_list:VBoxContainer = %TagsList
 @onready var add_tag_field:LineEdit = %AddTagField
@@ -11,6 +12,8 @@ const YOUTUBE_API_KEY = "youtube_api_key"
 @onready var add_cat_button:Button = %AddCatButton
 @onready var youtube_key_field:LineEdit = %YoutubeKeyField
 @onready var save_key_button:Button = %SaveKeyButton
+@onready var youtube_stale_days_field:SpinBox = %YoutubeStaleDaysField
+@onready var save_stale_days_button:Button = %SaveStaleDaysButton
 
 
 func _ready()-> void:
@@ -19,10 +22,13 @@ func _ready()-> void:
 	add_cat_button.pressed.connect(_on_add_cat_pressed)
 	add_cat_field.text_submitted.connect(func(_t:String): _on_add_cat_pressed())
 	save_key_button.pressed.connect(_on_save_key_pressed)
+	save_stale_days_button.pressed.connect(_on_save_stale_days_pressed)
 	Database.settings_changed.connect(_on_settings_changed)
 	_rebuild_tags()
 	_rebuild_categories()
 	youtube_key_field.text = Database.get_setting(YOUTUBE_API_KEY)
+	var stale_days_str = Database.get_setting(YOUTUBE_STALE_DAYS)
+	youtube_stale_days_field.value = int(stale_days_str) if stale_days_str.is_valid_int() else 1
 
 
 func _on_settings_changed()-> void:
@@ -83,3 +89,7 @@ func _on_add_cat_pressed()-> void:
 
 func _on_save_key_pressed()-> void:
 	Database.set_setting(YOUTUBE_API_KEY, youtube_key_field.text.strip_edges())
+
+
+func _on_save_stale_days_pressed()-> void:
+	Database.set_setting(YOUTUBE_STALE_DAYS, str(int(youtube_stale_days_field.value)))

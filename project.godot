@@ -19,6 +19,7 @@ config/icon="res://icon.svg"
 
 Database="*res://Globals/database.gd"
 TasksManager="*res://Globals/tasks_manager.gd"
+YoutubeFetcher="*res://Globals/youtube_fetcher.gd"
 
 [display]
 
