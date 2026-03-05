@@ -127,6 +127,28 @@ func _create_tables()-> void:
 			content_text TEXT DEFAULT '',
 			content_link TEXT DEFAULT ''
 		)""",
+		"""CREATE TABLE IF NOT EXISTS user_settings (
+			key TEXT PRIMARY KEY,
+			value TEXT NOT NULL DEFAULT ''
+		)""",
+		"""CREATE TABLE IF NOT EXISTS contact_youtube (
+			contact_id INTEGER PRIMARY KEY REFERENCES contacts(id) ON DELETE CASCADE,
+			last_fetch TEXT DEFAULT '',
+			channel_title TEXT DEFAULT '',
+			channel_description TEXT DEFAULT '',
+			last_activity TEXT DEFAULT '',
+			subscribers INTEGER DEFAULT 0
+		)""",
+		"""CREATE TABLE IF NOT EXISTS contact_youtube_videos (
+			id INTEGER PRIMARY KEY AUTOINCREMENT,
+			contact_id INTEGER NOT NULL REFERENCES contacts(id) ON DELETE CASCADE,
+			title TEXT DEFAULT '',
+			views INTEGER DEFAULT 0,
+			likes INTEGER DEFAULT 0,
+			comment_count INTEGER DEFAULT 0,
+			datetime TEXT DEFAULT '',
+			description TEXT DEFAULT ''
+		)""",
 	]
 	for stmt in statements:
 		if not _db.query(stmt):
@@ -607,6 +629,76 @@ func delete_contact_event(id:int)-> void:
 	events_changed.emit()
 
 #endregion Contact Events
+
+
+#region Settings
+
+func get_setting(key:String)-> String:
+	_db.query_with_bindings("SELECT value FROM user_settings WHERE key = ?", [key])
+	if _db.query_result.is_empty(): return ""
+	return _db.query_result[0].get("value", "")
+
+
+func set_setting(key:String, value:String)-> void:
+	_db.query_with_bindings(
+		"INSERT OR REPLACE INTO user_settings (key, value) VALUES (?, ?)", [key, value]
+	)
+
+#endregion Settings
+
+
+#region YouTube
+
+func load_contact_youtube(contact:Contact)-> void:
+	_db.query_with_bindings(
+		"SELECT * FROM contact_youtube WHERE contact_id = ?", [contact.id]
+	)
+	if not _db.query_result.is_empty():
+		var row = _db.query_result[0]
+		contact.youtube_last_fetch = row.get("last_fetch", "")
+		contact.youtube_channel_title = row.get("channel_title", "")
+		contact.youtube_channel_description = row.get("channel_description", "")
+		contact.youtube_last_activity = row.get("last_activity", "")
+		contact.youtube_subscribers = row.get("subscribers", 0)
+
+	contact.youtube_videos = []
+	_db.query_with_bindings(
+		"SELECT * FROM contact_youtube_videos WHERE contact_id = ? ORDER BY datetime DESC",
+		[contact.id]
+	)
+	for r in _db.query_result:
+		var video = YoutubeVideo.new()
+		video.title = r.get("title", "")
+		video.views = r.get("views", 0)
+		video.likes = r.get("likes", 0)
+		video.comment_count = r.get("comment_count", 0)
+		video.datetime = r.get("datetime", "")
+		video.description = r.get("description", "")
+		contact.youtube_videos.append(video)
+
+
+func save_contact_youtube(contact:Contact)-> void:
+	_db.query_with_bindings(
+		"""INSERT OR REPLACE INTO contact_youtube
+		   (contact_id, last_fetch, channel_title, channel_description, last_activity, subscribers)
+		   VALUES (?, ?, ?, ?, ?, ?)""",
+		[contact.id, contact.youtube_last_fetch, contact.youtube_channel_title,
+		 contact.youtube_channel_description, contact.youtube_last_activity,
+		 contact.youtube_subscribers]
+	)
+	_db.query_with_bindings(
+		"DELETE FROM contact_youtube_videos WHERE contact_id = ?", [contact.id]
+	)
+	for video in contact.youtube_videos:
+		_db.query_with_bindings(
+			"""INSERT INTO contact_youtube_videos
+			   (contact_id, title, views, likes, comment_count, datetime, description)
+			   VALUES (?, ?, ?, ?, ?, ?, ?)""",
+			[contact.id, video.title, video.views, video.likes,
+			 video.comment_count, video.datetime, video.description]
+		)
+
+#endregion YouTube
 
 
 #region Relevance

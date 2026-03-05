@@ -4,6 +4,7 @@
 [ext_resource type="PackedScene" uid="uid://dc60io7tovxq3" path="res://GUI/Contacts/contacts_tab.tscn" id="2_5vw27"]
 [ext_resource type="PackedScene" uid="uid://cu3aqe1xv66dp" path="res://GUI/Games/games_tab.tscn" id="4_4c57u"]
 [ext_resource type="PackedScene" uid="uid://duafu8tjsaekp" path="res://GUI/Tasks/tasks_tab.tscn" id="6_dg77c"]
+[ext_resource type="PackedScene" uid="uid://stg9876543210" path="res://GUI/Settings/settings_tab.tscn" id="8_stg"]
 
 [node name="Main" type="Control" unique_id=483029566]
 layout_mode = 3
@@ -31,3 +32,8 @@ metadata/_tab_index = 1
 visible = false
 layout_mode = 2
 metadata/_tab_index = 2
+
+[node name="Settings" parent="TabContainer" unique_id=28796794 instance=ExtResource("8_stg")]
+visible = false
+layout_mode = 2
+metadata/_tab_index = 3
