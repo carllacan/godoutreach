@@ -7,6 +7,8 @@ var _subscribers_label:Label
 @onready var contact_list_content:VBoxContainer = %ContactListContent
 @onready var editor_panel:VBoxContainer = %EditorPanel
 @onready var name_field:LineEdit = %NameField
+@onready var email_field:LineEdit = %EmailField
+@onready var email_link_button:LinkButton = %EmailLinkButton
 @onready var category_field:OptionButton = %CategoryField
 @onready var language_field:LineEdit = %LanguageField
 @onready var abandoned_check:CheckBox = %AbandonedCheck
@@ -28,6 +30,8 @@ var _subscribers_label:Label
 func _ready()-> void:
 	add_contact_button.pressed.connect(_on_add_contact_pressed)
 	save_button.pressed.connect(_on_save_pressed)
+	email_field.text_changed.connect(_on_email_changed)
+	email_link_button.pressed.connect(func(): OS.shell_open("mailto:" + email_field.text.strip_edges()))
 	delete_button.pressed.connect(_on_delete_pressed)
 	add_link_button.pressed.connect(func(): _add_link_row())
 	Database.contacts_changed.connect(_rebuild_contact_list)
@@ -74,6 +78,8 @@ func _on_contact_selected(id:int)-> void:
 func _load_contact(contact:Contact)-> void:
 	_current_contact = contact
 	name_field.text = contact.name
+	email_field.text = contact.email
+	_on_email_changed(contact.email)
 	language_field.text = contact.language
 	abandoned_check.button_pressed = contact.abandoned
 	notes_field.text = contact.notes
@@ -223,9 +229,15 @@ func _on_youtube_fetch_completed(contact_id:int, success:bool)-> void:
 	_refresh_youtube()
 
 
+func _on_email_changed(text:String)-> void:
+	email_link_button.visible = not text.strip_edges().is_empty()
+
+
 func _on_add_contact_pressed()-> void:
 	_current_contact = Contact.new()
 	name_field.text = ""
+	email_field.text = ""
+	_on_email_changed("")
 	language_field.text = ""
 	abandoned_check.button_pressed = false
 	notes_field.text = ""
@@ -244,6 +256,7 @@ func _on_save_pressed()-> void:
 	var trimmed = name_field.text.strip_edges()
 	if trimmed.is_empty(): return
 	_current_contact.name = trimmed
+	_current_contact.email = email_field.text.strip_edges()
 	_current_contact.language = language_field.text.strip_edges()
 	_current_contact.abandoned = abandoned_check.button_pressed
 	_current_contact.notes = notes_field.text

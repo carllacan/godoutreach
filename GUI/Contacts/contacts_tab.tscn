@@ -102,6 +102,26 @@ layout_mode = 2
 size_flags_horizontal = 3
 placeholder_text = "Contact name"
 
+[node name="EmailRow" type="HBoxContainer" parent="RightSide/EditorPanel/EditorScroll/EditorContent/GeneralInfo/BasicInfo/VBoxContainer"]
+layout_mode = 2
+
+[node name="EmailLabel" type="Label" parent="RightSide/EditorPanel/EditorScroll/EditorContent/GeneralInfo/BasicInfo/VBoxContainer/EmailRow"]
+custom_minimum_size = Vector2(90, 0)
+layout_mode = 2
+text = "Email"
+
+[node name="EmailField" type="LineEdit" parent="RightSide/EditorPanel/EditorScroll/EditorContent/GeneralInfo/BasicInfo/VBoxContainer/EmailRow"]
+unique_name_in_owner = true
+layout_mode = 2
+size_flags_horizontal = 3
+placeholder_text = "email@example.com"
+
+[node name="EmailLinkButton" type="LinkButton" parent="RightSide/EditorPanel/EditorScroll/EditorContent/GeneralInfo/BasicInfo/VBoxContainer/EmailRow"]
+unique_name_in_owner = true
+layout_mode = 2
+text = "Send email"
+visible = false
+
 [node name="CategoryRow" type="HBoxContainer" parent="RightSide/EditorPanel/EditorScroll/EditorContent/GeneralInfo/BasicInfo/VBoxContainer" unique_id=1851828956]
 layout_mode = 2
 

@@ -18,6 +18,7 @@ class ContactSavedContent:
 
 var id:int = -1
 var name:String = ""
+var email:String = ""
 var category_id:int = -1
 var language:String = ""
 var notes:String = ""

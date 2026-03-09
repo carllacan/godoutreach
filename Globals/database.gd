@@ -21,6 +21,7 @@ func _ready()-> void:
 		return
 	_db.query("PRAGMA foreign_keys = ON")
 	_create_tables()
+	_migrate_tables()
 	_insert_defaults()
 
 
@@ -43,6 +44,7 @@ func _create_tables()-> void:
 		"""CREATE TABLE IF NOT EXISTS contacts (
 			id INTEGER PRIMARY KEY AUTOINCREMENT,
 			name TEXT NOT NULL,
+			email TEXT DEFAULT '',
 			category_id INTEGER REFERENCES contact_categories(id),
 			language TEXT DEFAULT '',
 			notes TEXT DEFAULT '',
@@ -153,6 +155,11 @@ func _create_tables()-> void:
 	for stmt in statements:
 		if not _db.query(stmt):
 			push_error("Database: failed to create table")
+
+
+func _migrate_tables()-> void:
+	# Add columns introduced after initial schema — safe to re-run, failures are ignored
+	_db.query("ALTER TABLE contacts ADD COLUMN email TEXT DEFAULT ''")
 
 
 func _insert_defaults()-> void:
@@ -290,6 +297,7 @@ func _contact_from_row(row:Dictionary)-> Contact:
 	contact.name = row.name
 	var cat_id = row.get("category_id")
 	contact.category_id = cat_id if cat_id != null else -1
+	contact.email = row.get("email", "")
 	contact.language = row.get("language", "")
 	contact.notes = row.get("notes", "")
 	contact.abandoned = bool(row.get("abandoned", 0))
@@ -341,14 +349,14 @@ func save_contact(contact:Contact)-> void:
 	var cat_id = contact.category_id if contact.category_id != -1 else null
 	if contact.id == -1:
 		_db.query_with_bindings(
-			"INSERT INTO contacts (name, category_id, language, notes, abandoned) VALUES (?, ?, ?, ?, ?)",
-			[contact.name, cat_id, contact.language, contact.notes, int(contact.abandoned)]
+			"INSERT INTO contacts (name, email, category_id, language, notes, abandoned) VALUES (?, ?, ?, ?, ?, ?)",
+			[contact.name, contact.email, cat_id, contact.language, contact.notes, int(contact.abandoned)]
 		)
 		contact.id = _db.last_insert_rowid
 	else:
 		_db.query_with_bindings(
-			"UPDATE contacts SET name=?, category_id=?, language=?, notes=?, abandoned=? WHERE id=?",
-			[contact.name, cat_id, contact.language, contact.notes, int(contact.abandoned), contact.id]
+			"UPDATE contacts SET name=?, email=?, category_id=?, language=?, notes=?, abandoned=? WHERE id=?",
+			[contact.name, contact.email, cat_id, contact.language, contact.notes, int(contact.abandoned), contact.id]
 		)
 
 	_db.query_with_bindings("DELETE FROM contact_tags WHERE contact_id = ?", [contact.id])

@@ -45,6 +45,7 @@ static func import_csv(path:String) -> ImportResult:
 	var name_col = _find_col(headers, "name")
 	var youtube_col = _find_col(headers, "youtube")
 	var twitch_col = _find_col(headers, "twitch")
+	var email_col = _find_col(headers, "email")
 
 	if name_col == -1:
 		result.errors.append('CSV must have a "name" column in the header row.')
@@ -63,6 +64,9 @@ static func import_csv(path:String) -> ImportResult:
 
 		var contact = Contact.new()
 		contact.name = contact_name
+
+		if email_col != -1 and row.size() > email_col:
+			contact.email = row[email_col].strip_edges()
 
 		if youtube_col != -1 and row.size() > youtube_col:
 			var youtube_url = row[youtube_col].strip_edges()
