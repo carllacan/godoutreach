@@ -41,6 +41,11 @@ func update_mode()-> void:
 			%AddLinkButton.hide()
 			%SaveButton.hide()
 			%DeleteButton.hide()
+			
+			for l:ContactLinkEntry in %LinksContainer.get_children():
+				assert(l is ContactLinkEntry)
+				l.read_only = true
+				
 		Mode.EDIT:
 			%NameLabel.hide()
 			%EmailLinkButton.hide()
@@ -61,3 +66,6 @@ func update_mode()-> void:
 			%SaveButton.show()
 			%DeleteButton.show()
 			
+			for l:ContactLinkEntry in %LinksContainer.get_children():
+				assert(l is ContactLinkEntry)
+				l.read_only = false

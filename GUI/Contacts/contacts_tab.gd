@@ -141,44 +141,21 @@ func _refresh_links()-> void:
 
 
 func _add_link_row(link_name:String = "", link_url:String = "")-> void:
-	var row = HBoxContainer.new()
-	var name_dropdown = OptionButton.new()
-	name_dropdown.custom_minimum_size = Vector2(100, 0)
-	for n in Contact.ContactLink.DEFAULT_LINK_NAMES:
-		name_dropdown.add_item(n)
-	var matched = false
-	for i in name_dropdown.item_count:
-		if name_dropdown.get_item_text(i) == link_name:
-			name_dropdown.select(i)
-			matched = true
-			break
-	if not matched and not link_name.is_empty():
-		name_dropdown.add_item(link_name)
-		name_dropdown.select(name_dropdown.item_count - 1)
-	var url_field = LineEdit.new()
-	url_field.placeholder_text = "URL"
-	url_field.text = link_url
-	url_field.size_flags_horizontal = Control.SIZE_EXPAND_FILL
-	var del_btn = Button.new()
-	del_btn.text = "X"
-	del_btn.pressed.connect(func(): row.queue_free())
-	row.add_child(name_dropdown)
-	row.add_child(url_field)
-	row.add_child(del_btn)
-	links_container.add_child(row)
+	var entry:ContactLinkEntry = ContactLinkEntry.SCENE.instantiate()
+	links_container.add_child(entry)
+	entry.setup(link_name, link_url)
 
 
 func _collect_links()-> Array:
 	var result = []
-	for row in links_container.get_children():
-		var children = row.get_children()
-		if children.size() < 2: continue
+	for entry in links_container.get_children():
+		var link_entry = entry as ContactLinkEntry
+		if link_entry == null: continue
+		var url = link_entry.get_link_url()
+		if url.is_empty(): continue
 		var link = Contact.ContactLink.new()
-		link.name = (children[0] as OptionButton).get_item_text(
-			(children[0] as OptionButton).selected
-		)
-		link.link = (children[1] as LineEdit).text.strip_edges()
-		if link.link.is_empty(): continue
+		link.name = link_entry.get_link_name()
+		link.link = url
 		result.append(link)
 	return result
 

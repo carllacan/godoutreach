@@ -1,0 +1,35 @@
+[gd_scene format=3 uid="uid://i084opmg6xkc"]
+
+[ext_resource type="Script" uid="uid://dynmxcjcqx03g" path="res://GUI/Contacts/contact_link_entry.gd" id="1_linkentry"]
+
+[node name="ContactLinkEntry" type="HBoxContainer" unique_id=354031475]
+script = ExtResource("1_linkentry")
+
+[node name="NameLabel" type="Label" parent="." unique_id=1558503268]
+unique_name_in_owner = true
+visible = false
+layout_mode = 2
+text = "Youtube"
+
+[node name="NameDropdown" type="OptionButton" parent="." unique_id=1563701740]
+unique_name_in_owner = true
+custom_minimum_size = Vector2(100, 0)
+layout_mode = 2
+
+[node name="UrlLinkButton" type="LinkButton" parent="." unique_id=803688478]
+unique_name_in_owner = true
+visible = false
+layout_mode = 2
+text = "http://www.youtube.com/asdasd"
+
+[node name="UrlField" type="LineEdit" parent="." unique_id=517722333]
+unique_name_in_owner = true
+layout_mode = 2
+size_flags_horizontal = 3
+text = "http://www.youtube.com/asdasd"
+placeholder_text = "URL"
+
+[node name="DeleteButton" type="Button" parent="." unique_id=1011709929]
+unique_name_in_owner = true
+layout_mode = 2
+text = "X"
