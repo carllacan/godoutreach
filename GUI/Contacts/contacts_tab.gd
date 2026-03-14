@@ -20,15 +20,19 @@ var _subscribers_label:Label
 @onready var tasks_list:VBoxContainer = %TasksList
 @onready var no_selection_label:Label = %NoSelectionLabel
 @onready var add_contact_button:Button = %AddContactButton
-@onready var save_button:Button = %SaveButton
 @onready var channel_name_label:Label = %ChannelNameLabel
 @onready var channel_description_label:Label = %ChannelDescriptionLabel
+
+@onready var edit_button:Button = %EditButton
+@onready var save_button:Button = %SaveButton
+
 @onready var latest_activity_label:Label = %LatestActivityLabel
 @onready var youtube_videos:VBoxContainer = %YoutubeVideos
 
 
 func _ready()-> void:
 	add_contact_button.pressed.connect(_on_add_contact_pressed)
+	edit_button.pressed.connect(_on_edit_pressed)
 	save_button.pressed.connect(_on_save_pressed)
 	email_field.text_changed.connect(_on_email_changed)
 	email_link_button.pressed.connect(func(): OS.shell_open("mailto:" + email_field.text.strip_edges()))
@@ -71,9 +75,11 @@ func _rebuild_contact_list()-> void:
 func _on_contact_selected(id:int)-> void:
 	var contact = Database.get_contact(id)
 	if contact == null: return
+	if _current_contact and _current_contact.id == id: return
 	_load_contact(contact)
 	_show_editor(true)
-
+	%ContactFullView.mode = ContactFullView.Mode.READ
+	
 
 func _load_contact(contact:Contact)-> void:
 	_current_contact = contact
@@ -251,6 +257,12 @@ func _on_add_contact_pressed()-> void:
 	name_field.grab_focus()
 
 
+func _on_edit_pressed()-> void:
+	if _current_contact == null: return
+	
+	%ContactFullView.mode = ContactFullView.Mode.EDIT
+	
+	
 func _on_save_pressed()-> void:
 	if _current_contact == null: return
 	var trimmed = name_field.text.strip_edges()
@@ -264,6 +276,8 @@ func _on_save_pressed()-> void:
 	_current_contact.links = _collect_links()
 	Database.save_contact(_current_contact)
 	YoutubeFetcher.fetch_for_contact(_current_contact)
+	
+	%ContactFullView.mode = ContactFullView.Mode.READ
 
 
 func _on_delete_pressed()-> void:
