@@ -104,6 +104,7 @@ func _refresh_categories()-> void:
 	for cat in Database.get_all_contact_categories():
 		category_field.add_item(cat.name, cat.id)
 	if _current_contact == null: return
+	category_field.select(0)
 	for i in category_field.item_count:
 		if category_field.get_item_id(i) == _current_contact.category_id:
 			category_field.select(i)
@@ -197,9 +198,9 @@ func _refresh_tasks()-> void:
 		tasks_list.add_child(TaskSmallView.create(task))
 
 
-func _show_editor(show:bool)-> void:
-	editor_panel.visible = show
-	no_selection_label.visible = not show
+func _show_editor(shown:bool)-> void:
+	editor_panel.visible = shown
+	no_selection_label.visible = not shown
 
 
 func _refresh_youtube()-> void:

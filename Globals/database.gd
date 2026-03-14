@@ -158,8 +158,10 @@ func _create_tables()-> void:
 
 
 func _migrate_tables()-> void:
-	# Add columns introduced after initial schema — safe to re-run, failures are ignored
-	_db.query("ALTER TABLE contacts ADD COLUMN email TEXT DEFAULT ''")
+	_db.query("PRAGMA table_info(contacts)")
+	var has_email = _db.query_result.any(func(r): return r.get("name") == "email")
+	if not has_email:
+		_db.query("ALTER TABLE contacts ADD COLUMN email TEXT DEFAULT ''")
 
 
 func _insert_defaults()-> void:
@@ -346,18 +348,37 @@ func _contact_from_row(row:Dictionary)-> Contact:
 
 
 func save_contact(contact:Contact)-> void:
-	var cat_id = contact.category_id if contact.category_id != -1 else null
-	if contact.id == -1:
+	var has_category = false
+	if contact.category_id != -1:
 		_db.query_with_bindings(
-			"INSERT INTO contacts (name, email, category_id, language, notes, abandoned) VALUES (?, ?, ?, ?, ?, ?)",
-			[contact.name, contact.email, cat_id, contact.language, contact.notes, int(contact.abandoned)]
+			"SELECT 1 FROM contact_categories WHERE id = ?", [contact.category_id]
 		)
+		has_category = not _db.query_result.is_empty()
+		if not has_category:
+			push_warning("save_contact: category_id %d not found, saving as no category" % contact.category_id)
+	if contact.id == -1:
+		if has_category:
+			_db.query_with_bindings(
+				"INSERT INTO contacts (name, email, category_id, language, notes, abandoned) VALUES (?, ?, ?, ?, ?, ?)",
+				[contact.name, contact.email, contact.category_id, contact.language, contact.notes, int(contact.abandoned)]
+			)
+		else:
+			_db.query_with_bindings(
+				"INSERT INTO contacts (name, email, category_id, language, notes, abandoned) VALUES (?, ?, NULL, ?, ?, ?)",
+				[contact.name, contact.email, contact.language, contact.notes, int(contact.abandoned)]
+			)
 		contact.id = _db.last_insert_rowid
 	else:
-		_db.query_with_bindings(
-			"UPDATE contacts SET name=?, email=?, category_id=?, language=?, notes=?, abandoned=? WHERE id=?",
-			[contact.name, contact.email, cat_id, contact.language, contact.notes, int(contact.abandoned), contact.id]
-		)
+		if has_category:
+			_db.query_with_bindings(
+				"UPDATE contacts SET name=?, email=?, category_id=?, language=?, notes=?, abandoned=? WHERE id=?",
+				[contact.name, contact.email, contact.category_id, contact.language, contact.notes, int(contact.abandoned), contact.id]
+			)
+		else:
+			_db.query_with_bindings(
+				"UPDATE contacts SET name=?, email=?, category_id=NULL, language=?, notes=?, abandoned=? WHERE id=?",
+				[contact.name, contact.email, contact.language, contact.notes, int(contact.abandoned), contact.id]
+			)
 
 	_db.query_with_bindings("DELETE FROM contact_tags WHERE contact_id = ?", [contact.id])
 	for tag_id in contact.tag_ids:
