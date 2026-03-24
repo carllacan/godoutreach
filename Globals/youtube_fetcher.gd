@@ -40,6 +40,11 @@ func fetch_for_contacts(contacts:Array, force:bool = false)-> void:
 	if api_key.is_empty():
 		return
 
+	print("YoutubeFetcher: checking internet connection...")
+	if not await _has_internet():
+		push_error("YoutubeFetcher: no internet connection, aborting fetch")
+		return
+
 	var start_time:float = Time.get_unix_time_from_system()
 	var failed:Dictionary = {}  # contact name -> reason
 
@@ -306,6 +311,20 @@ func _do_fetch(contact:Contact, api_key:String)-> void:
 	Database.save_contact_youtube(contact)
 	print("YoutubeFetcher: done with %s" % contact.name)
 	fetch_completed.emit(contact.id, true)
+
+
+## Returns true if an internet connection is available.
+func _has_internet()-> bool:
+	var http = HTTPRequest.new()
+	add_child(http)
+	var err = http.request("https://clients3.google.com/generate_204")
+	if err != OK:
+		http.queue_free()
+		return false
+	var response = await http.request_completed
+	http.queue_free()
+	var http_code:int = response[1]
+	return http_code == 204
 
 
 ## Makes an HTTP GET request. Returns parsed JSON dict, or empty dict on failure.
