@@ -14,10 +14,10 @@ const YOUTUBE_MAX_VIDEOS = "max_youtube_videos_fetched"
 @onready var youtube_key_field:LineEdit = %YoutubeKeyField
 @onready var save_key_button:Button = %SaveKeyButton
 @onready var youtube_stale_days_field:SpinBox = %YoutubeStaleDaysField
-@onready var save_stale_days_button:Button = %SaveStaleDaysButton
 @onready var youtube_max_videos_field:SpinBox = %YoutubeMaxVideosField
-@onready var save_max_videos_button:Button = %SaveMaxVideosButton
 @onready var refresh_youtube_button:Button = %RefreshYoutubeButton
+@onready var save_button:Button = %SaveButton
+@onready var discard_button:Button = %DiscardButton
 
 
 func _ready()-> void:
@@ -25,9 +25,8 @@ func _ready()-> void:
 	add_tag_field.text_submitted.connect(func(_t:String): _on_add_tag_pressed())
 	add_cat_button.pressed.connect(_on_add_cat_pressed)
 	add_cat_field.text_submitted.connect(func(_t:String): _on_add_cat_pressed())
-	save_key_button.pressed.connect(_on_save_key_pressed)
-	save_stale_days_button.pressed.connect(_on_save_stale_days_pressed)
-	save_max_videos_button.pressed.connect(_on_save_max_videos_pressed)
+	save_button.pressed.connect(_on_save_pressed)
+	discard_button.pressed.connect(_on_discard_pressed)
 	refresh_youtube_button.pressed.connect(_on_refresh_youtube_pressed)
 	Database.settings_changed.connect(_on_settings_changed)
 	_rebuild_tags()
@@ -84,16 +83,18 @@ func _on_add_cat_pressed()-> void:
 	add_cat_field.text = ""
 
 
-func _on_save_key_pressed()-> void:
+func _on_save_pressed()-> void:
 	Database.set_setting(YOUTUBE_API_KEY, youtube_key_field.text.strip_edges())
-
-
-func _on_save_stale_days_pressed()-> void:
 	Database.set_setting(YOUTUBE_STALE_DAYS, str(int(youtube_stale_days_field.value)))
-
-
-func _on_save_max_videos_pressed()-> void:
 	Database.set_setting(YOUTUBE_MAX_VIDEOS, str(int(youtube_max_videos_field.value)))
+
+
+func _on_discard_pressed()-> void:
+	youtube_key_field.text = Database.get_setting(YOUTUBE_API_KEY)
+	var stale_days_str = Database.get_setting(YOUTUBE_STALE_DAYS)
+	youtube_stale_days_field.value = int(stale_days_str) if stale_days_str.is_valid_int() else 1
+	var max_videos_str = Database.get_setting(YOUTUBE_MAX_VIDEOS)
+	youtube_max_videos_field.value = int(max_videos_str) if max_videos_str.is_valid_int() else 10
 
 
 func _on_refresh_youtube_pressed()-> void:

@@ -3,6 +3,11 @@
 [ext_resource type="Script" uid="uid://ddtkpvg5xfq8x" path="res://GUI/Settings/settings_tab.gd" id="1_stg"]
 
 [node name="Settings" type="ScrollContainer" unique_id=1014161545]
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
 horizontal_scroll_mode = 0
 script = ExtResource("1_stg")
 
@@ -13,34 +18,35 @@ size_flags_horizontal = 3
 [node name="TagsSection" type="VBoxContainer" parent="Content" unique_id=2067117494]
 layout_mode = 2
 
-[node name="VBoxContainer" type="HBoxContainer" parent="Content/TagsSection" unique_id=378526455]
+[node name="VBoxContainer" type="VBoxContainer" parent="Content/TagsSection" unique_id=1155696135]
 layout_mode = 2
 
-[node name="MarginContainer" type="VBoxContainer" parent="Content/TagsSection/VBoxContainer" unique_id=620600429]
+[node name="TagsHeader" type="Label" parent="Content/TagsSection/VBoxContainer" unique_id=1529473466]
 layout_mode = 2
+text = "Tags"
+
+[node name="MarginContainer" type="HBoxContainer" parent="Content/TagsSection/VBoxContainer" unique_id=729079225]
+layout_mode = 2
+size_flags_horizontal = 3
 
 [node name="TagsList" type="FlowContainer" parent="Content/TagsSection/VBoxContainer/MarginContainer" unique_id=1993394321]
 unique_name_in_owner = true
 layout_mode = 2
 size_flags_horizontal = 3
 
-[node name="TagsHeader" type="Label" parent="Content/TagsSection/VBoxContainer/MarginContainer" unique_id=1529473466]
-layout_mode = 2
-text = "Tags"
-
-[node name="AddTagRow" type="VBoxContainer" parent="Content/TagsSection/VBoxContainer" unique_id=1379339697]
+[node name="AddTagRow" type="VBoxContainer" parent="Content/TagsSection/VBoxContainer/MarginContainer" unique_id=1379339697]
 layout_mode = 2
 size_flags_horizontal = 8
 size_flags_vertical = 8
 
-[node name="AddTagField" type="LineEdit" parent="Content/TagsSection/VBoxContainer/AddTagRow" unique_id=18311174]
+[node name="AddTagField" type="LineEdit" parent="Content/TagsSection/VBoxContainer/MarginContainer/AddTagRow" unique_id=18311174]
 unique_name_in_owner = true
 custom_minimum_size = Vector2(125, 0)
 layout_mode = 2
 size_flags_horizontal = 3
 placeholder_text = "New tag"
 
-[node name="AddTagButton" type="Button" parent="Content/TagsSection/VBoxContainer/AddTagRow" unique_id=1926404486]
+[node name="AddTagButton" type="Button" parent="Content/TagsSection/VBoxContainer/MarginContainer/AddTagRow" unique_id=1926404486]
 unique_name_in_owner = true
 layout_mode = 2
 text = "+ Add"
@@ -103,11 +109,6 @@ size_flags_horizontal = 3
 placeholder_text = "AIza..."
 secret = true
 
-[node name="SaveKeyButton" type="Button" parent="Content/YoutubeSection/YoutubeKeyRow" unique_id=1712568779]
-unique_name_in_owner = true
-layout_mode = 2
-text = "Save"
-
 [node name="YoutubeStaleDaysRow" type="HBoxContainer" parent="Content/YoutubeSection" unique_id=1907798000]
 layout_mode = 2
 
@@ -122,11 +123,6 @@ layout_mode = 2
 min_value = 1.0
 max_value = 365.0
 value = 1.0
-
-[node name="SaveStaleDaysButton" type="Button" parent="Content/YoutubeSection/YoutubeStaleDaysRow" unique_id=624043409]
-unique_name_in_owner = true
-layout_mode = 2
-text = "Save"
 
 [node name="YoutubeMaxVideosRow" type="HBoxContainer" parent="Content/YoutubeSection" unique_id=50275882]
 layout_mode = 2
@@ -143,11 +139,6 @@ min_value = 1.0
 max_value = 50.0
 value = 10.0
 
-[node name="SaveMaxVideosButton" type="Button" parent="Content/YoutubeSection/YoutubeMaxVideosRow" unique_id=1130266890]
-unique_name_in_owner = true
-layout_mode = 2
-text = "Save"
-
 [node name="YoutubeRefreshRow" type="HBoxContainer" parent="Content/YoutubeSection" unique_id=1443693700]
 layout_mode = 2
 
@@ -155,3 +146,21 @@ layout_mode = 2
 unique_name_in_owner = true
 layout_mode = 2
 text = "Refresh YouTube Data"
+
+[node name="Sep3" type="HSeparator" parent="Content" unique_id=548552060]
+layout_mode = 2
+
+[node name="SaveDiscardRow" type="HBoxContainer" parent="Content" unique_id=328540436]
+layout_mode = 2
+
+[node name="SaveButton" type="Button" parent="Content/SaveDiscardRow" unique_id=462193426]
+unique_name_in_owner = true
+layout_mode = 2
+size_flags_horizontal = 3
+text = "Save Settings"
+
+[node name="DiscardButton" type="Button" parent="Content/SaveDiscardRow" unique_id=593494991]
+unique_name_in_owner = true
+layout_mode = 2
+size_flags_horizontal = 3
+text = "Discard Changes"
