@@ -9,9 +9,23 @@ const _MAX_VIDEOS_SETTING = "max_youtube_videos_fetched"
 const _DEFAULT_STALE_DAYS = 1
 const _DEFAULT_MAX_VIDEOS = 10
 
-signal fetch_completed(contact_id:int, success:bool)
+signal started_fetching
+signal completed_fetching
+signal contact_fetch_completed(contact_id:int, success:bool)
+signal progress_changed(new_progress:float)
+
+var progress:float = 0.0 : set = set_progress
 
 
+func set_progress(new_value:float)-> void:
+	var old_value = progress
+	progress = new_value
+	var has_changed:bool = new_value != old_value
+	
+	if has_changed:
+		progress_changed.emit(progress)
+	
+	
 ## Fetches YouTube data for a single contact if their data is stale.
 ## Fire-and-forget: call without await for non-blocking behavior.
 func fetch_for_contact(contact:Contact)-> void:
@@ -36,6 +50,9 @@ func fetch_for_contact(contact:Contact)-> void:
 ## because channel stats are requested in a single batched channels.list call.
 ## Pass force=true to bypass the stale check and re-fetch all contacts.
 func fetch_for_contacts(contacts:Array, force:bool = false)-> void:
+	
+	started_fetching.emit()	
+	
 	var api_key = Database.get_setting(_API_KEY_SETTING)
 	if api_key.is_empty():
 		return
@@ -72,14 +89,14 @@ func fetch_for_contacts(contacts:Array, force:bool = false)-> void:
 	for i in total:
 		var c = to_fetch[i] as Contact
 		var yt_url = _get_youtube_url(c)
-		var pct:int = int((i + 1.0) / total * 50)
-		print("YoutubeFetcher [%d%%]: resolving channel ID for %s (url: %s)" % [pct, c.name, yt_url])
+		progress = int((i + 1.0) / total * 50)
+		print("YoutubeFetcher [%2.2f%%]: resolving channel ID for %s (url: %s)" % [progress, c.name, yt_url])
 		var identifier = _parse_channel_identifier(yt_url)
 		var channel_id = await _resolve_to_channel_id(identifier, api_key)
 		if not channel_id.is_empty():
 			contact_channel_map[c.id] = channel_id
 		else:
-			print("YoutubeFetcher [%d%%]: could not resolve channel ID for %s" % [pct, c.name])
+			print("YoutubeFetcher [%2.2f%%]: could not resolve channel ID for %s" % [progress, c.name])
 			failed[c.name] = "could not resolve channel ID from URL: %s" % yt_url
 
 	if contact_channel_map.is_empty():
@@ -122,7 +139,7 @@ func fetch_for_contacts(contacts:Array, force:bool = false)-> void:
 		Database.save_contact_youtube(c)
 		var done_pct:int = 50 + int(float(resolved_done) / resolved_total * 50)
 		print("YoutubeFetcher [%d%%]: done with %s" % [done_pct, c.name])
-		fetch_completed.emit(c.id, true)
+		contact_fetch_completed.emit(c.id, true)
 
 	var elapsed:int = int(Time.get_unix_time_from_system() - start_time)
 	print("YoutubeFetcher: fetched %d video(s) from %d contact(s) in %ds." % [total_videos, success_count, elapsed])
@@ -130,6 +147,9 @@ func fetch_for_contacts(contacts:Array, force:bool = false)-> void:
 		print("YoutubeFetcher: the following contacts could not be fetched:")
 		for contact_name in failed:
 			print("  - %s: %s" % [contact_name, failed[contact_name]])
+			
+			
+	completed_fetching.emit()
 
 
 #region Private helpers
@@ -285,7 +305,7 @@ func _do_fetch(contact:Contact, api_key:String)-> void:
 	var channel_id = await _resolve_to_channel_id(identifier, api_key)
 	if channel_id.is_empty():
 		push_warning("YoutubeFetcher: could not resolve channel ID for contact %d" % contact.id)
-		fetch_completed.emit(contact.id, false)
+		contact_fetch_completed.emit(contact.id, false)
 		return
 
 	print("YoutubeFetcher: fetching channel stats for %s" % contact.name)
@@ -293,7 +313,7 @@ func _do_fetch(contact:Contact, api_key:String)-> void:
 	var stats:Dictionary = stats_dict.get(channel_id, {})
 	if stats.is_empty():
 		print("YoutubeFetcher: no stats returned for %s" % contact.name)
-		fetch_completed.emit(contact.id, false)
+		contact_fetch_completed.emit(contact.id, false)
 		return
 
 	_apply_channel_stats(contact, stats)
@@ -310,7 +330,7 @@ func _do_fetch(contact:Contact, api_key:String)-> void:
 	contact.youtube_last_fetch = Time.get_datetime_string_from_system(true)
 	Database.save_contact_youtube(contact)
 	print("YoutubeFetcher: done with %s" % contact.name)
-	fetch_completed.emit(contact.id, true)
+	contact_fetch_completed.emit(contact.id, true)
 
 
 ## Returns true if an internet connection is available.

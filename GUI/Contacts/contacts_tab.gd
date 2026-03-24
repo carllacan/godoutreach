@@ -41,7 +41,7 @@ func _ready()-> void:
 	Database.contacts_changed.connect(_rebuild_contact_list)
 	Database.settings_changed.connect(_refresh_categories)
 	Database.events_changed.connect(_refresh_tasks)
-	YoutubeFetcher.fetch_completed.connect(_on_youtube_fetch_completed)
+	YoutubeFetcher.contact_fetch_completed.connect(_on_youtube_fetch_completed)
 	
 	%ImportContactsButton.pressed.connect(_open_import_window)
 	
