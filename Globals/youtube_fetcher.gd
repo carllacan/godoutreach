@@ -39,12 +39,16 @@ func fetch_for_contacts(contacts:Array, force:bool = false)-> void:
 	if api_key.is_empty():
 		return
 
+	var start_time:float = Time.get_unix_time_from_system()
+	var failed:Dictionary = {}  # contact name -> reason
+
 	var to_fetch:Array = []
 	for contact in contacts:
 		var c = contact as Contact
 		if c == null or c.id == -1:
 			continue
 		if _get_youtube_url(c).is_empty():
+			failed[c.name] = "no YouTube link"
 			continue
 		Database.load_contact_youtube(c)
 		if force or _is_stale(c.youtube_last_fetch):
@@ -70,6 +74,7 @@ func fetch_for_contacts(contacts:Array, force:bool = false)-> void:
 			contact_channel_map[c.id] = channel_id
 		else:
 			print("YoutubeFetcher [%d%%]: could not resolve channel ID for %s" % [pct, c.name])
+			failed[c.name] = "could not resolve channel ID from URL: %s" % yt_url
 
 	if contact_channel_map.is_empty():
 		print("YoutubeFetcher: no channel IDs could be resolved, nothing to fetch")
@@ -82,6 +87,8 @@ func fetch_for_contacts(contacts:Array, force:bool = false)-> void:
 
 	var resolved_total:int = contact_channel_map.size()
 	var resolved_done:int = 0
+	var total_videos:int = 0
+	var success_count:int = 0
 	for contact in to_fetch:
 		var c = contact as Contact
 		var channel_id:String = contact_channel_map.get(c.id, "")
@@ -90,6 +97,7 @@ func fetch_for_contacts(contacts:Array, force:bool = false)-> void:
 		var stats:Dictionary = channel_stats.get(channel_id, {})
 		if stats.is_empty():
 			print("YoutubeFetcher: no stats returned for %s" % c.name)
+			failed[c.name] = "no channel stats returned from API"
 			continue
 		_apply_channel_stats(c, stats)
 		var uploads_id:String = stats.get("uploads_playlist_id", "")
@@ -100,13 +108,22 @@ func fetch_for_contacts(contacts:Array, force:bool = false)-> void:
 			c.youtube_videos = videos
 			if not videos.is_empty():
 				c.youtube_last_activity = (videos[0] as YoutubeVideo).datetime
+			total_videos += videos.size()
 			print("YoutubeFetcher: got %d video(s) for %s" % [videos.size(), c.name])
 		resolved_done += 1
+		success_count += 1
 		c.youtube_last_fetch = Time.get_datetime_string_from_system(true)
 		Database.save_contact_youtube(c)
 		var done_pct:int = 50 + int(float(resolved_done) / resolved_total * 50)
 		print("YoutubeFetcher [%d%%]: done with %s" % [done_pct, c.name])
 		fetch_completed.emit(c.id, true)
+
+	var elapsed:int = int(Time.get_unix_time_from_system() - start_time)
+	print("YoutubeFetcher: fetched %d video(s) from %d contact(s) in %ds." % [total_videos, success_count, elapsed])
+	if not failed.is_empty():
+		print("YoutubeFetcher: the following contacts could not be fetched:")
+		for contact_name in failed:
+			print("  - %s: %s" % [contact_name, failed[contact_name]])
 
 
 #region Private helpers
