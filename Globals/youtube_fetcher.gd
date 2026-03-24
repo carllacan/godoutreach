@@ -15,6 +15,8 @@ signal contact_fetch_completed(contact_id:int, success:bool)
 signal progress_changed(new_progress:float)
 
 var progress:float = 0.0 : set = set_progress
+var abort_requested:bool = false
+var last_fetch_result:String = ""
 
 
 func set_progress(new_value:float)-> void:
@@ -51,8 +53,9 @@ func fetch_for_contact(contact:Contact)-> void:
 ## Pass force=true to bypass the stale check and re-fetch all contacts.
 func fetch_for_contacts(contacts:Array, force:bool = false)-> void:
 	
-	started_fetching.emit()	
-	
+	abort_requested = false
+	started_fetching.emit()
+
 	var api_key = Database.get_setting(_API_KEY_SETTING)
 	if api_key.is_empty():
 		return
@@ -60,6 +63,7 @@ func fetch_for_contacts(contacts:Array, force:bool = false)-> void:
 	print("YoutubeFetcher: checking internet connection...")
 	if not await _has_internet():
 		push_error("YoutubeFetcher: no internet connection, aborting fetch")
+		completed_fetching.emit()
 		return
 
 	var start_time:float = Time.get_unix_time_from_system()
@@ -87,6 +91,10 @@ func fetch_for_contacts(contacts:Array, force:bool = false)-> void:
 	# Resolve channel IDs (one request per contact, only for non-direct IDs)
 	var contact_channel_map:Dictionary = {}  # contact_id -> channel_id
 	for i in total:
+		if abort_requested:
+			last_fetch_result = "Aborted"
+			completed_fetching.emit()
+			return
 		var c = to_fetch[i] as Contact
 		var yt_url = _get_youtube_url(c)
 		progress = int((i + 1.0) / total * 50)
@@ -113,6 +121,10 @@ func fetch_for_contacts(contacts:Array, force:bool = false)-> void:
 	var total_videos:int = 0
 	var success_count:int = 0
 	for contact in to_fetch:
+		if abort_requested:
+			last_fetch_result = "Aborted"
+			completed_fetching.emit()
+			return
 		var c = contact as Contact
 		var channel_id:String = contact_channel_map.get(c.id, "")
 		if channel_id.is_empty():
@@ -125,8 +137,8 @@ func fetch_for_contacts(contacts:Array, force:bool = false)-> void:
 		_apply_channel_stats(c, stats)
 		var uploads_id:String = stats.get("uploads_playlist_id", "")
 		if not uploads_id.is_empty():
-			var pct:int = 50 + int(float(resolved_done) / resolved_total * 50)
-			print("YoutubeFetcher [%d%%]: fetching videos for %s" % [pct, c.name])
+			progress = 50 + float(resolved_done) / resolved_total * 50
+			print("YoutubeFetcher [%2.2f%%]: fetching videos for %s" % [progress, c.name])
 			var videos = await _fetch_latest_videos(uploads_id, api_key)
 			c.youtube_videos = videos
 			if not videos.is_empty():
@@ -137,16 +149,23 @@ func fetch_for_contacts(contacts:Array, force:bool = false)-> void:
 		success_count += 1
 		c.youtube_last_fetch = Time.get_datetime_string_from_system(true)
 		Database.save_contact_youtube(c)
-		var done_pct:int = 50 + int(float(resolved_done) / resolved_total * 50)
-		print("YoutubeFetcher [%d%%]: done with %s" % [done_pct, c.name])
+		progress = 50 + float(resolved_done) / resolved_total * 50
+		print("YoutubeFetcher [%2.2f%%]: done with %s" % [progress, c.name])
 		contact_fetch_completed.emit(c.id, true)
 
 	var elapsed:int = int(Time.get_unix_time_from_system() - start_time)
-	print("YoutubeFetcher: fetched %d video(s) from %d contact(s) in %ds." % [total_videos, success_count, elapsed])
+	
+	## Output result summary
+	last_fetch_result = ""
+	last_fetch_result += "YoutubeFetcher: fetched %d video(s) from %d contact(s) in %ds." % [
+		total_videos, success_count, elapsed]		
+	last_fetch_result += "\n"
 	if not failed.is_empty():
-		print("YoutubeFetcher: the following contacts could not be fetched:")
+		last_fetch_result += "YoutubeFetcher: the following contacts could not be fetched:"
+		last_fetch_result += "\n"
 		for contact_name in failed:
-			print("  - %s: %s" % [contact_name, failed[contact_name]])
+			last_fetch_result += "  - %s: %s" % [contact_name, failed[contact_name]]
+			last_fetch_result += "\n"
 			
 			
 	completed_fetching.emit()

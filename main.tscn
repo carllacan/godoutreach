@@ -89,6 +89,11 @@ unique_name_in_owner = true
 layout_mode = 2
 text = "Please wait..."
 
+[node name="ResultLabel" type="Label" parent="WindowContainer/CenterContainer/YoutubeFetchWindow/VBoxContainer" unique_id=512988591]
+unique_name_in_owner = true
+layout_mode = 2
+text = "Please wait..."
+
 [node name="ProgressBar" type="ProgressBar" parent="WindowContainer/CenterContainer/YoutubeFetchWindow/VBoxContainer" unique_id=1004955194]
 unique_name_in_owner = true
 layout_mode = 2
