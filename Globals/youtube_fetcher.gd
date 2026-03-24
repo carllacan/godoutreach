@@ -5,8 +5,9 @@ extends Node
 const _API_BASE = "https://www.googleapis.com/youtube/v3"
 const _API_KEY_SETTING = "youtube_api_key"
 const _STALE_DAYS_SETTING = "youtube_stale_days"
+const _MAX_VIDEOS_SETTING = "max_youtube_videos_fetched"
 const _DEFAULT_STALE_DAYS = 1
-const MAX_VIDEOS = 1
+const _DEFAULT_MAX_VIDEOS = 10
 
 signal fetch_completed(contact_id:int, success:bool)
 
@@ -230,8 +231,10 @@ func _apply_channel_stats(contact:Contact, stats:Dictionary)-> void:
 ## Fetches latest videos from the channel's uploads playlist.
 ## Returns an Array of YoutubeVideo, newest first.
 func _fetch_latest_videos(uploads_playlist_id:String, api_key:String)-> Array:
+	var max_videos_str = Database.get_setting(_MAX_VIDEOS_SETTING)
+	var max_videos:int = int(max_videos_str) if max_videos_str.is_valid_int() else _DEFAULT_MAX_VIDEOS
 	var url = "%s/playlistItems?part=snippet&playlistId=%s&maxResults=%d&key=%s" % [
-		_API_BASE, uploads_playlist_id, MAX_VIDEOS, api_key
+		_API_BASE, uploads_playlist_id, max_videos, api_key
 	]
 	var data = await _http_get(url)
 	var video_ids:Array[String] = []

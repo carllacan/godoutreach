@@ -3,6 +3,7 @@ extends ScrollContainer
 
 const YOUTUBE_API_KEY = "youtube_api_key"
 const YOUTUBE_STALE_DAYS = "youtube_stale_days"
+const YOUTUBE_MAX_VIDEOS = "max_youtube_videos_fetched"
 
 @onready var tags_list:VBoxContainer = %TagsList
 @onready var add_tag_field:LineEdit = %AddTagField
@@ -14,6 +15,8 @@ const YOUTUBE_STALE_DAYS = "youtube_stale_days"
 @onready var save_key_button:Button = %SaveKeyButton
 @onready var youtube_stale_days_field:SpinBox = %YoutubeStaleDaysField
 @onready var save_stale_days_button:Button = %SaveStaleDaysButton
+@onready var youtube_max_videos_field:SpinBox = %YoutubeMaxVideosField
+@onready var save_max_videos_button:Button = %SaveMaxVideosButton
 @onready var refresh_youtube_button:Button = %RefreshYoutubeButton
 
 
@@ -24,6 +27,7 @@ func _ready()-> void:
 	add_cat_field.text_submitted.connect(func(_t:String): _on_add_cat_pressed())
 	save_key_button.pressed.connect(_on_save_key_pressed)
 	save_stale_days_button.pressed.connect(_on_save_stale_days_pressed)
+	save_max_videos_button.pressed.connect(_on_save_max_videos_pressed)
 	refresh_youtube_button.pressed.connect(_on_refresh_youtube_pressed)
 	Database.settings_changed.connect(_on_settings_changed)
 	_rebuild_tags()
@@ -31,6 +35,8 @@ func _ready()-> void:
 	youtube_key_field.text = Database.get_setting(YOUTUBE_API_KEY)
 	var stale_days_str = Database.get_setting(YOUTUBE_STALE_DAYS)
 	youtube_stale_days_field.value = int(stale_days_str) if stale_days_str.is_valid_int() else 1
+	var max_videos_str = Database.get_setting(YOUTUBE_MAX_VIDEOS)
+	youtube_max_videos_field.value = int(max_videos_str) if max_videos_str.is_valid_int() else 10
 
 
 func _on_settings_changed()-> void:
@@ -95,6 +101,10 @@ func _on_save_key_pressed()-> void:
 
 func _on_save_stale_days_pressed()-> void:
 	Database.set_setting(YOUTUBE_STALE_DAYS, str(int(youtube_stale_days_field.value)))
+
+
+func _on_save_max_videos_pressed()-> void:
+	Database.set_setting(YOUTUBE_MAX_VIDEOS, str(int(youtube_max_videos_field.value)))
 
 
 func _on_refresh_youtube_pressed()-> void:

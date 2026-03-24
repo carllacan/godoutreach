@@ -113,6 +113,26 @@ unique_name_in_owner = true
 layout_mode = 2
 text = "Save"
 
+[node name="YoutubeMaxVideosRow" type="HBoxContainer" parent="Content/YoutubeSection"]
+layout_mode = 2
+
+[node name="YoutubeMaxVideosLabel" type="Label" parent="Content/YoutubeSection/YoutubeMaxVideosRow"]
+custom_minimum_size = Vector2(120, 0)
+layout_mode = 2
+text = "Videos per contact"
+
+[node name="YoutubeMaxVideosField" type="SpinBox" parent="Content/YoutubeSection/YoutubeMaxVideosRow"]
+unique_name_in_owner = true
+layout_mode = 2
+min_value = 1.0
+max_value = 50.0
+value = 10.0
+
+[node name="SaveMaxVideosButton" type="Button" parent="Content/YoutubeSection/YoutubeMaxVideosRow"]
+unique_name_in_owner = true
+layout_mode = 2
+text = "Save"
+
 [node name="YoutubeRefreshRow" type="HBoxContainer" parent="Content/YoutubeSection"]
 layout_mode = 2
 
