@@ -6,8 +6,6 @@ func get_tasks_for_game(game:UserGame)-> Array[Task]:
 	for contact in contacts:
 		if contact.abandoned:
 			continue
-		if not (game.id in contact.relevant_game_ids):
-			continue
 		var task = _get_task_for_contact_game(contact, game)
 		if task != null:
 			tasks.append(task)
