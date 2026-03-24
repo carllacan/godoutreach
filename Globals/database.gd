@@ -144,6 +144,7 @@ func _create_tables()-> void:
 		"""CREATE TABLE IF NOT EXISTS contact_youtube_videos (
 			id INTEGER PRIMARY KEY AUTOINCREMENT,
 			contact_id INTEGER NOT NULL REFERENCES contacts(id) ON DELETE CASCADE,
+			url TEXT DEFAULT '',
 			title TEXT DEFAULT '',
 			views INTEGER DEFAULT 0,
 			likes INTEGER DEFAULT 0,
@@ -162,6 +163,11 @@ func _migrate_tables()-> void:
 	var has_email = _db.query_result.any(func(r): return r.get("name") == "email")
 	if not has_email:
 		_db.query("ALTER TABLE contacts ADD COLUMN email TEXT DEFAULT ''")
+
+	_db.query("PRAGMA table_info(contact_youtube_videos)")
+	var has_url = _db.query_result.any(func(r): return r.get("name") == "url")
+	if not has_url:
+		_db.query("ALTER TABLE contact_youtube_videos ADD COLUMN url TEXT DEFAULT ''")
 
 
 func _insert_defaults()-> void:
@@ -697,6 +703,7 @@ func load_contact_youtube(contact:Contact)-> void:
 	)
 	for r in _db.query_result:
 		var video = YoutubeVideo.new()
+		video.url = r.get("url", "")
 		video.title = r.get("title", "")
 		video.views = r.get("views", 0)
 		video.likes = r.get("likes", 0)
@@ -721,9 +728,9 @@ func save_contact_youtube(contact:Contact)-> void:
 	for video in contact.youtube_videos:
 		_db.query_with_bindings(
 			"""INSERT INTO contact_youtube_videos
-			   (contact_id, title, views, likes, comment_count, datetime, description)
-			   VALUES (?, ?, ?, ?, ?, ?, ?)""",
-			[contact.id, video.title, video.views, video.likes,
+			   (contact_id, url, title, views, likes, comment_count, datetime, description)
+			   VALUES (?, ?, ?, ?, ?, ?, ?, ?)""",
+			[contact.id, video.url, video.title, video.views, video.likes,
 			 video.comment_count, video.datetime, video.description]
 		)
 

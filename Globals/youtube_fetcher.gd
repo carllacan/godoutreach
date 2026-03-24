@@ -6,7 +6,7 @@ const _API_BASE = "https://www.googleapis.com/youtube/v3"
 const _API_KEY_SETTING = "youtube_api_key"
 const _STALE_DAYS_SETTING = "youtube_stale_days"
 const _DEFAULT_STALE_DAYS = 1
-const MAX_VIDEOS = 10
+const MAX_VIDEOS = 1
 
 signal fetch_completed(contact_id:int, success:bool)
 
@@ -25,13 +25,16 @@ func fetch_for_contact(contact:Contact)-> void:
 		return
 	Database.load_contact_youtube(contact)
 	if not _is_stale(contact.youtube_last_fetch):
+		print("YoutubeFetcher: skipping %s (data is fresh)" % contact.name)
 		return
+	print("YoutubeFetcher: fetching data for %s" % contact.name)
 	await _do_fetch(contact, api_key)
 
 
 ## Fetches YouTube data for multiple contacts. More API-efficient for bulk updates
 ## because channel stats are requested in a single batched channels.list call.
-func fetch_for_contacts(contacts:Array)-> void:
+## Pass force=true to bypass the stale check and re-fetch all contacts.
+func fetch_for_contacts(contacts:Array, force:bool = false)-> void:
 	var api_key = Database.get_setting(_API_KEY_SETTING)
 	if api_key.is_empty():
 		return
@@ -44,28 +47,41 @@ func fetch_for_contacts(contacts:Array)-> void:
 		if _get_youtube_url(c).is_empty():
 			continue
 		Database.load_contact_youtube(c)
-		if _is_stale(c.youtube_last_fetch):
+		if force or _is_stale(c.youtube_last_fetch):
 			to_fetch.append(c)
 
 	if to_fetch.is_empty():
+		print("YoutubeFetcher: all contacts are up to date, nothing to fetch")
 		return
+
+	var total:int = to_fetch.size()
+	print("YoutubeFetcher: fetching data for %d contact(s)" % total)
 
 	# Resolve channel IDs (one request per contact, only for non-direct IDs)
 	var contact_channel_map:Dictionary = {}  # contact_id -> channel_id
-	for contact in to_fetch:
-		var c = contact as Contact
-		var identifier = _parse_channel_identifier(_get_youtube_url(c))
+	for i in total:
+		var c = to_fetch[i] as Contact
+		var yt_url = _get_youtube_url(c)
+		var pct:int = int((i + 1.0) / total * 50)
+		print("YoutubeFetcher [%d%%]: resolving channel ID for %s (url: %s)" % [pct, c.name, yt_url])
+		var identifier = _parse_channel_identifier(yt_url)
 		var channel_id = await _resolve_to_channel_id(identifier, api_key)
 		if not channel_id.is_empty():
 			contact_channel_map[c.id] = channel_id
+		else:
+			print("YoutubeFetcher [%d%%]: could not resolve channel ID for %s" % [pct, c.name])
 
 	if contact_channel_map.is_empty():
+		print("YoutubeFetcher: no channel IDs could be resolved, nothing to fetch")
 		return
 
 	# Batch fetch all channel stats in a single API call
+	print("YoutubeFetcher [50%%]: fetching channel stats for %d channel(s)" % contact_channel_map.size())
 	var ids_csv = ",".join(contact_channel_map.values())
 	var channel_stats = await _fetch_channel_stats_batch(ids_csv, api_key)
 
+	var resolved_total:int = contact_channel_map.size()
+	var resolved_done:int = 0
 	for contact in to_fetch:
 		var c = contact as Contact
 		var channel_id:String = contact_channel_map.get(c.id, "")
@@ -73,16 +89,23 @@ func fetch_for_contacts(contacts:Array)-> void:
 			continue
 		var stats:Dictionary = channel_stats.get(channel_id, {})
 		if stats.is_empty():
+			print("YoutubeFetcher: no stats returned for %s" % c.name)
 			continue
 		_apply_channel_stats(c, stats)
 		var uploads_id:String = stats.get("uploads_playlist_id", "")
 		if not uploads_id.is_empty():
+			var pct:int = 50 + int(float(resolved_done) / resolved_total * 50)
+			print("YoutubeFetcher [%d%%]: fetching videos for %s" % [pct, c.name])
 			var videos = await _fetch_latest_videos(uploads_id, api_key)
 			c.youtube_videos = videos
 			if not videos.is_empty():
 				c.youtube_last_activity = (videos[0] as YoutubeVideo).datetime
+			print("YoutubeFetcher: got %d video(s) for %s" % [videos.size(), c.name])
+		resolved_done += 1
 		c.youtube_last_fetch = Time.get_datetime_string_from_system(true)
 		Database.save_contact_youtube(c)
+		var done_pct:int = 50 + int(float(resolved_done) / resolved_total * 50)
+		print("YoutubeFetcher [%d%%]: done with %s" % [done_pct, c.name])
 		fetch_completed.emit(c.id, true)
 
 
@@ -138,14 +161,19 @@ func _parse_channel_identifier(url:String)-> Dictionary:
 
 func _resolve_to_channel_id(identifier:Dictionary, api_key:String)-> String:
 	if identifier.is_empty():
+		print("YoutubeFetcher: identifier is empty, cannot resolve channel ID")
 		return ""
+	print("YoutubeFetcher: identifier = %s" % str(identifier))
 	if identifier.type == "id":
+		print("YoutubeFetcher: direct channel ID, no resolution needed")
 		return identifier.value
 	var param_key = "forHandle" if identifier.type in ["handle", "custom"] else "forUsername"
 	var url = "%s/channels?part=id&%s=%s&key=%s" % [
 		_API_BASE, param_key, identifier.value, api_key
 	]
+	print("YoutubeFetcher: resolving via %s=%s" % [param_key, identifier.value])
 	var data = await _http_get(url)
+	print("YoutubeFetcher: resolution response = %s" % str(data))
 	var items = data.get("items", [])
 	if items.is_empty():
 		return ""
@@ -210,6 +238,8 @@ func _fetch_latest_videos(uploads_playlist_id:String, api_key:String)-> Array:
 		var video = YoutubeVideo.new()
 		var snippet:Dictionary = item.get("snippet", {})
 		var statistics:Dictionary = item.get("statistics", {})
+		var vid_id:String = item.get("id", "")
+		video.url = "https://www.youtube.com/watch?v=" + vid_id if not vid_id.is_empty() else ""
 		video.title = snippet.get("title", "")
 		video.description = snippet.get("description", "")
 		video.datetime = snippet.get("publishedAt", "")
@@ -224,16 +254,20 @@ func _fetch_latest_videos(uploads_playlist_id:String, api_key:String)-> Array:
 
 
 func _do_fetch(contact:Contact, api_key:String)-> void:
-	var identifier = _parse_channel_identifier(_get_youtube_url(contact))
+	var yt_url = _get_youtube_url(contact)
+	print("YoutubeFetcher: resolving channel ID for %s (url: %s)" % [contact.name, yt_url])
+	var identifier = _parse_channel_identifier(yt_url)
 	var channel_id = await _resolve_to_channel_id(identifier, api_key)
 	if channel_id.is_empty():
 		push_warning("YoutubeFetcher: could not resolve channel ID for contact %d" % contact.id)
 		fetch_completed.emit(contact.id, false)
 		return
 
+	print("YoutubeFetcher: fetching channel stats for %s" % contact.name)
 	var stats_dict = await _fetch_channel_stats_batch(channel_id, api_key)
 	var stats:Dictionary = stats_dict.get(channel_id, {})
 	if stats.is_empty():
+		print("YoutubeFetcher: no stats returned for %s" % contact.name)
 		fetch_completed.emit(contact.id, false)
 		return
 
@@ -241,13 +275,16 @@ func _do_fetch(contact:Contact, api_key:String)-> void:
 
 	var uploads_id:String = stats.get("uploads_playlist_id", "")
 	if not uploads_id.is_empty():
+		print("YoutubeFetcher: fetching latest videos for %s" % contact.name)
 		var videos = await _fetch_latest_videos(uploads_id, api_key)
 		contact.youtube_videos = videos
 		if not videos.is_empty():
 			contact.youtube_last_activity = (videos[0] as YoutubeVideo).datetime
+		print("YoutubeFetcher: got %d video(s) for %s" % [videos.size(), contact.name])
 
 	contact.youtube_last_fetch = Time.get_datetime_string_from_system(true)
 	Database.save_contact_youtube(contact)
+	print("YoutubeFetcher: done with %s" % contact.name)
 	fetch_completed.emit(contact.id, true)
 
 

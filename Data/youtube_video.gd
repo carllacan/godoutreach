@@ -1,5 +1,6 @@
 class_name YoutubeVideo
 
+var url:String = ""
 var title:String = ""
 var views:int = 0
 var likes:int = 0

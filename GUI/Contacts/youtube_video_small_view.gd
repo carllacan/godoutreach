@@ -5,7 +5,7 @@ const SCENE = preload("res://GUI/Contacts/youtube_video_small_view.tscn")
 
 var video:YoutubeVideo : set = set_video
 
-@onready var title_label:Label = %TitleLabel
+@onready var title_label:LinkButton = %TitleLabel
 @onready var date_label:Label = %DateLabel
 @onready var views_label:Label = %ViewsLabel
 @onready var likes_label:Label = %LikesLabel
@@ -24,6 +24,7 @@ func set_video(new_value:YoutubeVideo)-> void:
 
 
 func _ready()-> void:
+	title_label.pressed.connect(_on_title_pressed)
 	make()
 
 
@@ -35,6 +36,11 @@ func make()-> void:
 	views_label.text = "  %s views" % _fmt(video.views)
 	likes_label.text = "  %s likes" % _fmt(video.likes)
 	comments_label.text = "  %s comments" % _fmt(video.comment_count)
+
+
+func _on_title_pressed()-> void:
+	if video != null and not video.url.is_empty():
+		OS.shell_open(video.url)
 
 
 func _fmt(n:int)-> String:

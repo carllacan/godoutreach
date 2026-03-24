@@ -14,6 +14,7 @@ const YOUTUBE_STALE_DAYS = "youtube_stale_days"
 @onready var save_key_button:Button = %SaveKeyButton
 @onready var youtube_stale_days_field:SpinBox = %YoutubeStaleDaysField
 @onready var save_stale_days_button:Button = %SaveStaleDaysButton
+@onready var refresh_youtube_button:Button = %RefreshYoutubeButton
 
 
 func _ready()-> void:
@@ -23,6 +24,7 @@ func _ready()-> void:
 	add_cat_field.text_submitted.connect(func(_t:String): _on_add_cat_pressed())
 	save_key_button.pressed.connect(_on_save_key_pressed)
 	save_stale_days_button.pressed.connect(_on_save_stale_days_pressed)
+	refresh_youtube_button.pressed.connect(_on_refresh_youtube_pressed)
 	Database.settings_changed.connect(_on_settings_changed)
 	_rebuild_tags()
 	_rebuild_categories()
@@ -93,3 +95,12 @@ func _on_save_key_pressed()-> void:
 
 func _on_save_stale_days_pressed()-> void:
 	Database.set_setting(YOUTUBE_STALE_DAYS, str(int(youtube_stale_days_field.value)))
+
+
+func _on_refresh_youtube_pressed()-> void:
+	refresh_youtube_button.disabled = true
+	refresh_youtube_button.text = "Refreshing..."
+	var contacts = Database.get_all_contacts()
+	await YoutubeFetcher.fetch_for_contacts(contacts, true)
+	refresh_youtube_button.disabled = false
+	refresh_youtube_button.text = "Refresh YouTube Data"
