@@ -27,7 +27,8 @@ func update_mode()-> void:
 			%EmailLinkButton.show()
 			%CategoryLabel.show()
 			%LanguageLabel.show()
-			%AbandonedCheck.disabled = true
+			%AbandonedCheck.hide()
+			%AbandonedLabel.visible = %AbandonedCheck.button_pressed
 			%NotesContainerPanel.show()
 			%TagsLabel.show()
 			%EditButton.show()
@@ -51,7 +52,8 @@ func update_mode()-> void:
 			%EmailLinkButton.hide()
 			%CategoryLabel.hide()
 			%LanguageLabel.hide()
-			%AbandonedCheck.disabled = false
+			%AbandonedCheck.show()
+			%AbandonedLabel.hide()
 			%NotesContainerPanel.hide()
 			%TagsLabel.hide()
 			%EditButton.hide()

@@ -179,6 +179,11 @@ layout_mode = 2
 tooltip_text = "Check this if the channel seems to have been abandoned."
 text = "Abandoned"
 
+[node name="AbandonedLabel" type="Label" parent="RightSide/EditorPanel/EditorScroll/EditorContent/ContactFullView/BasicInfo/VBoxContainer/HBoxContainer/AbandonedRow" unique_id=2080828089]
+unique_name_in_owner = true
+layout_mode = 2
+text = "THIS CHANNEL HAS BEEN ABANDONED"
+
 [node name="NotesSection" type="VBoxContainer" parent="RightSide/EditorPanel/EditorScroll/EditorContent/ContactFullView/BasicInfo/VBoxContainer" unique_id=1754081801]
 layout_mode = 2
 
