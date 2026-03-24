@@ -17,49 +17,60 @@ unique_name_in_owner = true
 layout_mode = 2
 size_flags_horizontal = 3
 
-[node name="TasksScroll" type="ScrollContainer" parent="." unique_id=1593210281]
+[node name="TaskCards" type="HBoxContainer" parent="." unique_id=1573252162]
 layout_mode = 2
+
+[node name="TasksScroll" type="ScrollContainer" parent="TaskCards" unique_id=1593210281]
+layout_mode = 2
+size_flags_horizontal = 3
 size_flags_vertical = 3
+size_flags_stretch_ratio = 2.0
 horizontal_scroll_mode = 0
 
-[node name="ScrollContent" type="VBoxContainer" parent="TasksScroll" unique_id=1679832863]
+[node name="ScrollContent" type="VBoxContainer" parent="TaskCards/TasksScroll" unique_id=1679832863]
 layout_mode = 2
 size_flags_horizontal = 3
 
-[node name="EmptyLabel" type="Label" parent="TasksScroll/ScrollContent" unique_id=1807830257]
+[node name="EmptyLabel" type="Label" parent="TaskCards/TasksScroll/ScrollContent" unique_id=1807830257]
 unique_name_in_owner = true
 modulate = Color(1, 1, 1, 0.4)
 layout_mode = 2
 text = "No tasks. Add contacts to a game to get started."
 horizontal_alignment = 1
 
-[node name="PendingSection" type="VBoxContainer" parent="TasksScroll/ScrollContent" unique_id=400781735]
+[node name="PendingSection" type="VBoxContainer" parent="TaskCards/TasksScroll/ScrollContent" unique_id=400781735]
 unique_name_in_owner = true
 visible = false
 layout_mode = 2
 
-[node name="PendingHeader" type="Label" parent="TasksScroll/ScrollContent/PendingSection" unique_id=222486600]
+[node name="PendingHeader" type="Label" parent="TaskCards/TasksScroll/ScrollContent/PendingSection" unique_id=222486600]
 modulate = Color(1, 0.64705884, 0, 1)
 layout_mode = 2
 text = "PENDING  —  things you can do right now"
 
-[node name="PendingCards" type="HFlowContainer" parent="TasksScroll/ScrollContent/PendingSection" unique_id=1624333671]
+[node name="PendingCards" type="HFlowContainer" parent="TaskCards/TasksScroll/ScrollContent/PendingSection" unique_id=1624333671]
 unique_name_in_owner = true
 layout_mode = 2
 
-[node name="Sep" type="HSeparator" parent="TasksScroll/ScrollContent" unique_id=887472043]
+[node name="Sep" type="HSeparator" parent="TaskCards/TasksScroll/ScrollContent" unique_id=887472043]
 layout_mode = 2
 
-[node name="WaitingSection" type="VBoxContainer" parent="TasksScroll/ScrollContent" unique_id=1427656879]
+[node name="TasksScroll2" type="ScrollContainer" parent="TaskCards" unique_id=905903522]
+layout_mode = 2
+size_flags_horizontal = 3
+size_flags_vertical = 3
+horizontal_scroll_mode = 0
+
+[node name="WaitingSection" type="VBoxContainer" parent="TaskCards/TasksScroll2" unique_id=1427656879]
 unique_name_in_owner = true
 visible = false
 layout_mode = 2
 
-[node name="WaitingHeader" type="Label" parent="TasksScroll/ScrollContent/WaitingSection" unique_id=872131248]
+[node name="WaitingHeader" type="Label" parent="TaskCards/TasksScroll2/WaitingSection" unique_id=872131248]
 modulate = Color(0.39215687, 0.58431375, 0.92941177, 1)
 layout_mode = 2
 text = "WAITING  —  things others need to do"
 
-[node name="WaitingCards" type="HFlowContainer" parent="TasksScroll/ScrollContent/WaitingSection" unique_id=670783778]
+[node name="WaitingCards" type="HFlowContainer" parent="TaskCards/TasksScroll2/WaitingSection" unique_id=670783778]
 unique_name_in_owner = true
 layout_mode = 2

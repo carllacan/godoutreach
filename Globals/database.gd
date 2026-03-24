@@ -201,11 +201,11 @@ func get_all_tags()-> Array[Tag]:
 	return result
 
 
-func create_tag(name:String)-> Tag:
-	_db.query_with_bindings("INSERT INTO tags (name) VALUES (?)", [name])
+func create_tag(tag_name:String)-> Tag:
+	_db.query_with_bindings("INSERT INTO tags (name) VALUES (?)", [tag_name])
 	var t = Tag.new()
 	t.id = _db.last_insert_rowid
-	t.name = name
+	t.name = tag_name
 	settings_changed.emit()
 	return t
 
@@ -231,13 +231,13 @@ func get_all_contact_categories()-> Array[ContactCategory]:
 	return result
 
 
-func create_contact_category(name:String)-> ContactCategory:
+func create_contact_category(cat_name:String)-> ContactCategory:
 	_db.query_with_bindings(
-		"INSERT INTO contact_categories (name, is_builtin) VALUES (?, 0)", [name]
+		"INSERT INTO contact_categories (name, is_builtin) VALUES (?, 0)", [cat_name]
 	)
 	var cat = ContactCategory.new()
 	cat.id = _db.last_insert_rowid
-	cat.name = name
+	cat.name = cat_name
 	settings_changed.emit()
 	return cat
 
@@ -265,11 +265,11 @@ func get_all_event_kinds()-> Array[EventKind]:
 	return result
 
 
-func create_event_kind(name:String)-> EventKind:
-	_db.query_with_bindings("INSERT INTO event_kinds (name, is_builtin) VALUES (?, 0)", [name])
+func create_event_kind(event_kind_name:String)-> EventKind:
+	_db.query_with_bindings("INSERT INTO event_kinds (name, is_builtin) VALUES (?, 0)", [event_kind_name])
 	var kind = EventKind.new()
 	kind.id = _db.last_insert_rowid
-	kind.name = name
+	kind.name = event_kind_name
 	settings_changed.emit()
 	return kind
 
@@ -479,8 +479,8 @@ func _user_game_from_row(row:Dictionary)-> UserGame:
 		_db.query_with_bindings(
 			"SELECT tag_id FROM short_description_tags WHERE description_id = ?", [desc.id]
 		)
-		for tr in _db.query_result:
-			desc.tag_ids.append(tr.tag_id)
+		for _tr in _db.query_result:
+			desc.tag_ids.append(_tr.tag_id)
 		game.short_descriptions.append(desc)
 
 	_db.query_with_bindings(
@@ -493,8 +493,8 @@ func _user_game_from_row(row:Dictionary)-> UserGame:
 		_db.query_with_bindings(
 			"SELECT tag_id FROM description_tags WHERE description_id = ?", [desc.id]
 		)
-		for tr in _db.query_result:
-			desc.tag_ids.append(tr.tag_id)
+		for _tr in _db.query_result:
+			desc.tag_ids.append(_tr.tag_id)
 		game.descriptions.append(desc)
 
 	_db.query_with_bindings(

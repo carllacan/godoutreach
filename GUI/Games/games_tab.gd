@@ -180,9 +180,9 @@ func _on_game_tag_toggled(tag_id:int, pressed:bool)-> void:
 
 
 func _on_add_game_tag_pressed()-> void:
-	var name = add_game_tag_field.text.strip_edges()
-	if name.is_empty(): return
-	Database.create_tag(name)
+	var tag_name = add_game_tag_field.text.strip_edges()
+	if tag_name.is_empty(): return
+	Database.create_tag(tag_name)
 	add_game_tag_field.text = ""
 
 
@@ -346,9 +346,9 @@ func _on_events_changed()-> void:
 	_rebuild_game_list()
 
 
-func _show_right_panel(show:bool)-> void:
-	right_panel.visible = show
-	no_selection_label.visible = not show
+func _show_right_panel(value:bool)-> void:
+	right_panel.visible = value
+	no_selection_label.visible = not value
 
 
 func _on_add_game_pressed()-> void:

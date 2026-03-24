@@ -74,16 +74,16 @@ func _rebuild_categories()-> void:
 
 
 func _on_add_tag_pressed()-> void:
-	var name = add_tag_field.text.strip_edges()
-	if name.is_empty(): return
-	Database.create_tag(name)
+	var tag_name = add_tag_field.text.strip_edges()
+	if tag_name.is_empty(): return
+	Database.create_tag(tag_name)
 	add_tag_field.text = ""
 
 
 func _on_add_cat_pressed()-> void:
-	var name = add_cat_field.text.strip_edges()
-	if name.is_empty(): return
-	Database.create_contact_category(name)
+	var cat_name = add_cat_field.text.strip_edges()
+	if cat_name.is_empty(): return
+	Database.create_contact_category(cat_name)
 	add_cat_field.text = ""
 
 

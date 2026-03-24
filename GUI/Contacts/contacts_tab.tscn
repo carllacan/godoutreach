@@ -3,20 +3,6 @@
 [ext_resource type="Script" uid="uid://biw437uaepb3p" path="res://GUI/Contacts/contacts_tab.gd" id="1_83jby"]
 [ext_resource type="Script" uid="uid://cx58fvn6pjm4" path="res://GUI/Contacts/contact_full_view.gd" id="2_3uf1a"]
 
-[sub_resource type="GDScript" id="GDScript_83jby"]
-script/source = "extends VBoxContainer
-
-
-# Called when the node enters the scene tree for the first time.
-func _ready() -> void:
-	pass # Replace with function body.
-
-
-# Called every frame. 'delta' is the elapsed time since the previous frame.
-func _process(delta: float) -> void:
-	pass
-"
-
 [node name="Contacts" type="HSplitContainer" unique_id=185556015]
 anchors_preset = 15
 anchor_right = 1.0
@@ -302,7 +288,6 @@ tab_1/disabled = true
 
 [node name="YoutubeContent" type="VBoxContainer" parent="RightSide/EditorPanel/EditorScroll/EditorContent/Content/VBoxContainer/ContentTypeTabs" unique_id=385097213]
 layout_mode = 2
-script = SubResource("GDScript_83jby")
 metadata/_tab_index = 0
 metadata/_tab_name = "Youtube"
 
@@ -355,7 +340,6 @@ layout_mode = 2
 [node name="TwitchContent" type="VBoxContainer" parent="RightSide/EditorPanel/EditorScroll/EditorContent/Content/VBoxContainer/ContentTypeTabs" unique_id=2044189994]
 visible = false
 layout_mode = 2
-script = SubResource("GDScript_83jby")
 metadata/_tab_index = 1
 metadata/_tab_name = "Twitch"
 
