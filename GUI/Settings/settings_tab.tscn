@@ -1,142 +1,157 @@
-[gd_scene format=3 uid="uid://stg9876543210"]
+[gd_scene format=3 uid="uid://ddtsv0i5vbk0x"]
 
-[ext_resource type="Script" uid="uid://stg1234567890" path="res://GUI/Settings/settings_tab.gd" id="1_stg"]
+[ext_resource type="Script" uid="uid://ddtkpvg5xfq8x" path="res://GUI/Settings/settings_tab.gd" id="1_stg"]
 
-[node name="Settings" type="ScrollContainer"]
-script = ExtResource("1_stg")
+[node name="Settings" type="ScrollContainer" unique_id=1014161545]
 horizontal_scroll_mode = 0
+script = ExtResource("1_stg")
 
-[node name="Content" type="VBoxContainer" parent="."]
+[node name="Content" type="VBoxContainer" parent="." unique_id=2129557035]
 layout_mode = 2
 size_flags_horizontal = 3
 
-[node name="TagsSection" type="VBoxContainer" parent="Content"]
+[node name="TagsSection" type="VBoxContainer" parent="Content" unique_id=2067117494]
 layout_mode = 2
 
-[node name="TagsHeader" type="Label" parent="Content/TagsSection"]
+[node name="VBoxContainer" type="HBoxContainer" parent="Content/TagsSection" unique_id=378526455]
+layout_mode = 2
+
+[node name="MarginContainer" type="VBoxContainer" parent="Content/TagsSection/VBoxContainer" unique_id=620600429]
+layout_mode = 2
+
+[node name="TagsList" type="FlowContainer" parent="Content/TagsSection/VBoxContainer/MarginContainer" unique_id=1993394321]
+unique_name_in_owner = true
+layout_mode = 2
+size_flags_horizontal = 3
+
+[node name="TagsHeader" type="Label" parent="Content/TagsSection/VBoxContainer/MarginContainer" unique_id=1529473466]
 layout_mode = 2
 text = "Tags"
 
-[node name="TagsList" type="VBoxContainer" parent="Content/TagsSection"]
-unique_name_in_owner = true
+[node name="AddTagRow" type="VBoxContainer" parent="Content/TagsSection/VBoxContainer" unique_id=1379339697]
 layout_mode = 2
+size_flags_horizontal = 8
+size_flags_vertical = 8
 
-[node name="AddTagRow" type="HBoxContainer" parent="Content/TagsSection"]
-layout_mode = 2
-
-[node name="AddTagField" type="LineEdit" parent="Content/TagsSection/AddTagRow"]
+[node name="AddTagField" type="LineEdit" parent="Content/TagsSection/VBoxContainer/AddTagRow" unique_id=18311174]
 unique_name_in_owner = true
+custom_minimum_size = Vector2(125, 0)
 layout_mode = 2
 size_flags_horizontal = 3
-placeholder_text = "New tag name"
+placeholder_text = "New tag"
 
-[node name="AddTagButton" type="Button" parent="Content/TagsSection/AddTagRow"]
+[node name="AddTagButton" type="Button" parent="Content/TagsSection/VBoxContainer/AddTagRow" unique_id=1926404486]
 unique_name_in_owner = true
 layout_mode = 2
 text = "+ Add"
 
-[node name="Sep1" type="HSeparator" parent="Content"]
+[node name="Sep1" type="HSeparator" parent="Content" unique_id=459888897]
 layout_mode = 2
 
-[node name="CategoriesSection" type="VBoxContainer" parent="Content"]
+[node name="CategoriesSection" type="VBoxContainer" parent="Content" unique_id=295248550]
 layout_mode = 2
 
-[node name="CatsHeader" type="Label" parent="Content/CategoriesSection"]
+[node name="CatsHeader" type="Label" parent="Content/CategoriesSection" unique_id=1797920652]
 layout_mode = 2
 text = "Contact Categories"
 
-[node name="CatsList" type="VBoxContainer" parent="Content/CategoriesSection"]
-unique_name_in_owner = true
+[node name="HBoxContainer" type="HBoxContainer" parent="Content/CategoriesSection" unique_id=730585879]
 layout_mode = 2
 
-[node name="AddCatRow" type="HBoxContainer" parent="Content/CategoriesSection"]
-layout_mode = 2
-
-[node name="AddCatField" type="LineEdit" parent="Content/CategoriesSection/AddCatRow"]
+[node name="CatsList" type="FlowContainer" parent="Content/CategoriesSection/HBoxContainer" unique_id=574449060]
 unique_name_in_owner = true
 layout_mode = 2
 size_flags_horizontal = 3
-placeholder_text = "New category name"
 
-[node name="AddCatButton" type="Button" parent="Content/CategoriesSection/AddCatRow"]
+[node name="AddCatRow" type="VBoxContainer" parent="Content/CategoriesSection/HBoxContainer" unique_id=469146515]
+layout_mode = 2
+
+[node name="AddCatField" type="LineEdit" parent="Content/CategoriesSection/HBoxContainer/AddCatRow" unique_id=1209302377]
+unique_name_in_owner = true
+custom_minimum_size = Vector2(125, 0)
+layout_mode = 2
+size_flags_horizontal = 3
+placeholder_text = "New category "
+
+[node name="AddCatButton" type="Button" parent="Content/CategoriesSection/HBoxContainer/AddCatRow" unique_id=525301923]
 unique_name_in_owner = true
 layout_mode = 2
 text = "+ Add"
 
-[node name="Sep2" type="HSeparator" parent="Content"]
+[node name="Sep2" type="HSeparator" parent="Content" unique_id=1530550881]
 layout_mode = 2
 
-[node name="YoutubeSection" type="VBoxContainer" parent="Content"]
+[node name="YoutubeSection" type="VBoxContainer" parent="Content" unique_id=1743510611]
 layout_mode = 2
 
-[node name="YoutubeHeader" type="Label" parent="Content/YoutubeSection"]
+[node name="YoutubeHeader" type="Label" parent="Content/YoutubeSection" unique_id=1624776044]
 layout_mode = 2
 text = "YouTube"
 
-[node name="YoutubeKeyRow" type="HBoxContainer" parent="Content/YoutubeSection"]
+[node name="YoutubeKeyRow" type="HBoxContainer" parent="Content/YoutubeSection" unique_id=1537965173]
 layout_mode = 2
 
-[node name="YoutubeKeyLabel" type="Label" parent="Content/YoutubeSection/YoutubeKeyRow"]
+[node name="YoutubeKeyLabel" type="Label" parent="Content/YoutubeSection/YoutubeKeyRow" unique_id=152256164]
 custom_minimum_size = Vector2(60, 0)
 layout_mode = 2
 text = "API Key"
 
-[node name="YoutubeKeyField" type="LineEdit" parent="Content/YoutubeSection/YoutubeKeyRow"]
+[node name="YoutubeKeyField" type="LineEdit" parent="Content/YoutubeSection/YoutubeKeyRow" unique_id=158772912]
 unique_name_in_owner = true
 layout_mode = 2
 size_flags_horizontal = 3
-secret = true
 placeholder_text = "AIza..."
+secret = true
 
-[node name="SaveKeyButton" type="Button" parent="Content/YoutubeSection/YoutubeKeyRow"]
+[node name="SaveKeyButton" type="Button" parent="Content/YoutubeSection/YoutubeKeyRow" unique_id=1712568779]
 unique_name_in_owner = true
 layout_mode = 2
 text = "Save"
 
-[node name="YoutubeStaleDaysRow" type="HBoxContainer" parent="Content/YoutubeSection"]
+[node name="YoutubeStaleDaysRow" type="HBoxContainer" parent="Content/YoutubeSection" unique_id=1907798000]
 layout_mode = 2
 
-[node name="YoutubeStaleDaysLabel" type="Label" parent="Content/YoutubeSection/YoutubeStaleDaysRow"]
+[node name="YoutubeStaleDaysLabel" type="Label" parent="Content/YoutubeSection/YoutubeStaleDaysRow" unique_id=1620342983]
 custom_minimum_size = Vector2(120, 0)
 layout_mode = 2
 text = "Re-fetch after (days)"
 
-[node name="YoutubeStaleDaysField" type="SpinBox" parent="Content/YoutubeSection/YoutubeStaleDaysRow"]
+[node name="YoutubeStaleDaysField" type="SpinBox" parent="Content/YoutubeSection/YoutubeStaleDaysRow" unique_id=105319221]
 unique_name_in_owner = true
 layout_mode = 2
 min_value = 1.0
 max_value = 365.0
 value = 1.0
 
-[node name="SaveStaleDaysButton" type="Button" parent="Content/YoutubeSection/YoutubeStaleDaysRow"]
+[node name="SaveStaleDaysButton" type="Button" parent="Content/YoutubeSection/YoutubeStaleDaysRow" unique_id=624043409]
 unique_name_in_owner = true
 layout_mode = 2
 text = "Save"
 
-[node name="YoutubeMaxVideosRow" type="HBoxContainer" parent="Content/YoutubeSection"]
+[node name="YoutubeMaxVideosRow" type="HBoxContainer" parent="Content/YoutubeSection" unique_id=50275882]
 layout_mode = 2
 
-[node name="YoutubeMaxVideosLabel" type="Label" parent="Content/YoutubeSection/YoutubeMaxVideosRow"]
+[node name="YoutubeMaxVideosLabel" type="Label" parent="Content/YoutubeSection/YoutubeMaxVideosRow" unique_id=229633359]
 custom_minimum_size = Vector2(120, 0)
 layout_mode = 2
 text = "Videos per contact"
 
-[node name="YoutubeMaxVideosField" type="SpinBox" parent="Content/YoutubeSection/YoutubeMaxVideosRow"]
+[node name="YoutubeMaxVideosField" type="SpinBox" parent="Content/YoutubeSection/YoutubeMaxVideosRow" unique_id=134424506]
 unique_name_in_owner = true
 layout_mode = 2
 min_value = 1.0
 max_value = 50.0
 value = 10.0
 
-[node name="SaveMaxVideosButton" type="Button" parent="Content/YoutubeSection/YoutubeMaxVideosRow"]
+[node name="SaveMaxVideosButton" type="Button" parent="Content/YoutubeSection/YoutubeMaxVideosRow" unique_id=1130266890]
 unique_name_in_owner = true
 layout_mode = 2
 text = "Save"
 
-[node name="YoutubeRefreshRow" type="HBoxContainer" parent="Content/YoutubeSection"]
+[node name="YoutubeRefreshRow" type="HBoxContainer" parent="Content/YoutubeSection" unique_id=1443693700]
 layout_mode = 2
 
-[node name="RefreshYoutubeButton" type="Button" parent="Content/YoutubeSection/YoutubeRefreshRow"]
+[node name="RefreshYoutubeButton" type="Button" parent="Content/YoutubeSection/YoutubeRefreshRow" unique_id=2051848441]
 unique_name_in_owner = true
 layout_mode = 2
 text = "Refresh YouTube Data"

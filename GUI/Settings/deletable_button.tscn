@@ -1,0 +1,18 @@
+[gd_scene format=3 uid="uid://beofsvly0hsfy"]
+
+[ext_resource type="Script" uid="uid://l1jm84juqms2" path="res://GUI/Settings/deletable_button.gd" id="1_db"]
+
+[node name="DeletableButton" type="PanelContainer" unique_id=514754187]
+script = ExtResource("1_db")
+
+[node name="HBoxContainer" type="HBoxContainer" parent="." unique_id=2078117954]
+layout_mode = 2
+
+[node name="Label" type="Label" parent="HBoxContainer" unique_id=906144878]
+unique_name_in_owner = true
+layout_mode = 2
+
+[node name="DeleteButton" type="Button" parent="HBoxContainer" unique_id=1657365854]
+unique_name_in_owner = true
+layout_mode = 2
+text = "X"

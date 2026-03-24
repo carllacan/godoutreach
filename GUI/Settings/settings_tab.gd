@@ -5,10 +5,10 @@ const YOUTUBE_API_KEY = "youtube_api_key"
 const YOUTUBE_STALE_DAYS = "youtube_stale_days"
 const YOUTUBE_MAX_VIDEOS = "max_youtube_videos_fetched"
 
-@onready var tags_list:VBoxContainer = %TagsList
+@onready var tags_list:Control = %TagsList
 @onready var add_tag_field:LineEdit = %AddTagField
 @onready var add_tag_button:Button = %AddTagButton
-@onready var cats_list:VBoxContainer = %CatsList
+@onready var cats_list:Control = %CatsList
 @onready var add_cat_field:LineEdit = %AddCatField
 @onready var add_cat_button:Button = %AddCatButton
 @onready var youtube_key_field:LineEdit = %YoutubeKeyField
@@ -46,39 +46,28 @@ func _on_settings_changed()-> void:
 
 func _rebuild_tags()-> void:
 	for child in tags_list.get_children():
-		child.queue_free()
+		if child is DeletableButton:
+			child.queue_free()
 	for tag in Database.get_all_tags():
-		var row = HBoxContainer.new()
-		var lbl = Label.new()
-		lbl.text = tag.name
-		lbl.size_flags_horizontal = Control.SIZE_EXPAND_FILL
-		var del_btn = Button.new()
-		del_btn.text = "Delete"
 		var tag_id = tag.id
-		del_btn.pressed.connect(func(): Database.delete_tag(tag_id))
-		row.add_child(lbl)
-		row.add_child(del_btn)
-		tags_list.add_child(row)
+		var btn = DeletableButton.create(tag.name)
+		btn.deletion_requested.connect(func(): Database.delete_tag(tag_id))
+		tags_list.add_child(btn)
+		move_child(btn, -1)
 
 
 func _rebuild_categories()-> void:
 	for child in cats_list.get_children():
 		child.queue_free()
 	for cat in Database.get_all_contact_categories():
-		var row = HBoxContainer.new()
-		var lbl = Label.new()
-		lbl.text = cat.name
-		lbl.size_flags_horizontal = Control.SIZE_EXPAND_FILL
+		var btn = DeletableButton.create(cat.name)
 		if cat.is_builtin:
-			lbl.modulate = Color(1, 1, 1, 0.5)
+			btn.modulate = Color(1, 1, 1, 0.5)
+			btn.get_node("%DeleteButton").visible = false
 		else:
-			var del_btn = Button.new()
-			del_btn.text = "Delete"
 			var cat_id = cat.id
-			del_btn.pressed.connect(func(): Database.delete_contact_category(cat_id))
-			row.add_child(del_btn)
-		row.add_child(lbl)
-		cats_list.add_child(row)
+			btn.deletion_requested.connect(func(): Database.delete_contact_category(cat_id))
+		cats_list.add_child(btn)
 
 
 func _on_add_tag_pressed()-> void:
