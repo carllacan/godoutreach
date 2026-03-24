@@ -36,8 +36,6 @@ func get_all_tasks()-> Array[Task]:
 func categorize_contacts_for_game(game:UserGame)-> Dictionary:
 	var result = {"done": [], "waiting": [], "pending": [], "prospect": [], "discarded": []}
 	for contact in Database.get_all_contacts():
-		if not (game.id in contact.relevant_game_ids):
-			continue
 		if contact.abandoned:
 			result.discarded.append(contact)
 			continue
